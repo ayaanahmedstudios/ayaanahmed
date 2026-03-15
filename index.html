@@ -59,48 +59,45 @@
       align-items: center;
       gap: 14px;
       padding: clamp(13px, 2vw, 16px) clamp(24px, 3.5vw, 36px);
-      border: 1.5px solid rgba(42,157,143,0.6);
+      border: 1.5px solid rgba(42, 157, 143, 0.6);
       background: transparent;
-      color: rgba(232,228,222,0.65);
+      color: #ffffff;
       text-decoration: none;
       font-family: 'Bricolage Grotesque', sans-serif;
       font-size: clamp(14px, 1.6vw, 16px);
       font-weight: 400;
       letter-spacing: 0.01em;
       border-radius: 100px;
-      position: relative;
-      overflow: hidden;
       min-height: 50px;
-      transition: color 0.4s ease, border-color 0.4s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.4s ease;
+      transition:
+        color 0.35s ease,
+        background 0.35s ease,
+        border-color 0.35s ease,
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .cta-btn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: #2a9d8f;
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.45s cubic-bezier(0.16,1,0.3,1);
-      border-radius: inherit;
-    }
-
-    .cta-btn:hover::before { transform: scaleX(1); }
     .cta-btn:hover {
+      background: #2a9d8f;
       color: #0a1212;
       border-color: #2a9d8f;
-      box-shadow: 0 8px 36px rgba(42,157,143,0.25);
       transform: translateY(-2px);
     }
-    .cta-btn:active { transform: translateY(0) scale(0.97); }
-    .cta-btn span, .cta-btn svg { position: relative; z-index: 1; }
+
+    .cta-btn:active {
+      transform: translateY(0) scale(0.97);
+    }
+
     .cta-btn svg {
-      width: 14px; height: 14px;
+      width: 14px;
+      height: 14px;
       stroke: currentColor;
       flex-shrink: 0;
-      transition: transform 0.35s cubic-bezier(0.16,1,0.3,1);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .cta-btn:hover svg { transform: translate(3px,-3px); }
+
+    .cta-btn:hover svg {
+      transform: translate(3px, -3px);
+    }
   </style>
 </head>
 <body>
@@ -110,12 +107,25 @@
 <div class="cta-wrap" id="cta">
   <a class="cta-btn" href="https://ayaanahmed.format.com/home" target="_blank" rel="noopener">
     <span>Visit Portfolio</span>
-    <svg viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M12 2H5.5M12 2V8.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg viewBox="0 0 14 14" fill="none">
+      <path d="M2 12L12 2M12 2H5.5M12 2V8.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
   </a>
 </div>
 
 <script>
-  const WORDS = ["Ayaan", "Ahmed"];
+  // ── Favicon: geometric "A" — two cream legs, teal crossbar ──────────────
+  const faviconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#161818"/><text x="16" y="26" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-weight="800" font-size="26" fill="#e8e4de">A</text></svg>`;
+
+  const fav = document.createElement('link');
+  fav.rel  = 'icon';
+  fav.type = 'image/svg+xml';
+  fav.href = 'data:image/svg+xml;base64,' + btoa(faviconSVG);
+  document.head.appendChild(fav);
+
+
+  // ── Name build ───────────────────────────────────────────────────────────
+  const WORDS  = ['Ayaan', 'Ahmed'];
   const nameEl = document.getElementById('name');
   const letters = [];
 
@@ -127,13 +137,16 @@
     }
     word.split('').forEach(ch => {
       const s = document.createElement('span');
-      s.className = 'letter';
-      s.textContent = ch;
+      s.className    = 'letter';
+      s.textContent  = ch;
+
       nameEl.appendChild(s);
       letters.push(s);
     });
   });
 
+
+  // ── Entry animation ──────────────────────────────────────────────────────
   function easeOutExpo(t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
   function easeOutBack(t) {
     const c1 = 1.70158, c3 = c1 + 1;
@@ -141,7 +154,7 @@
   }
   function lerp(a, b, t) { return a + (b - a) * t; }
 
-  const N = letters.length;
+  const N       = letters.length;
   const maxDist = Math.min(window.innerWidth, window.innerHeight) * 0.7;
 
   const startStates = letters.map((_, i) => {
@@ -160,8 +173,8 @@
   const BTN_START = ENTRY_END + 200;
 
   let btnShown = false;
-  let done = false;
-  let t0 = null;
+  let done     = false;
+  let t0       = null;
 
   function tick(ts) {
     if (done) return;
@@ -179,18 +192,15 @@
       btnShown = true;
       const cta = document.getElementById('cta');
       cta.style.transition = 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)';
-      cta.style.opacity = '1';
-      cta.style.transform = 'translateY(0)';
+      cta.style.opacity    = '1';
+      cta.style.transform  = 'translateY(0)';
     }
 
     if (el < BTN_START + 900) {
       requestAnimationFrame(tick);
     } else {
       done = true;
-      letters.forEach(l => {
-        l.style.transform = 'none';
-        l.style.opacity   = '1';
-      });
+      letters.forEach(l => { l.style.transform = 'none'; l.style.opacity = '1'; });
     }
   }
 
