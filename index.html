@@ -1,210 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Home / Ayaan Ahmed</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #161818;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(20px, 3vw, 32px);
-      font-family: 'Bricolage Grotesque', sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    #name {
-      display: flex;
-      align-items: baseline;
-      justify-content: center;
-    }
-
-    .letter {
-      display: inline-block;
-      font-size: clamp(52px, 13vw, 164px);
-      font-weight: 800;
-      color: #e8e4de;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      opacity: 0;
-      position: relative;
-    }
-
-    .word-gap {
-      display: inline-block;
-      font-size: clamp(52px, 13vw, 164px);
-      width: 0.25em;
-    }
-
-    .cta-wrap {
-      opacity: 0;
-      transform: translateY(12px);
-    }
-
-    .cta-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      padding: clamp(13px, 2vw, 16px) clamp(24px, 3.5vw, 36px);
-      border: 1.5px solid rgba(42, 157, 143, 0.6);
-      background: transparent;
-      color: #ffffff;
-      text-decoration: none;
-      font-family: 'Bricolage Grotesque', sans-serif;
-      font-size: clamp(14px, 1.6vw, 16px);
-      font-weight: 400;
-      letter-spacing: 0.01em;
-      border-radius: 100px;
-      min-height: 50px;
-      transition:
-        color 0.35s ease,
-        background 0.35s ease,
-        border-color 0.35s ease,
-        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .cta-btn:hover {
-      background: #2a9d8f;
-      color: #0a1212;
-      border-color: #2a9d8f;
-      transform: translateY(-2px);
-    }
-
-    .cta-btn:active {
-      transform: translateY(0) scale(0.97);
-    }
-
-    .cta-btn svg {
-      width: 14px;
-      height: 14px;
-      stroke: currentColor;
-      flex-shrink: 0;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .cta-btn:hover svg {
-      transform: translate(3px, -3px);
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayaan Ahmed / Home</title>
+<link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<meta name="robots" content="noimageindex">
 </head>
-<body>
+<body class="home-page">
 
-<div id="name"></div>
+<header class="header">
+<div class="logo">Ayaan Ahmed.</div>
 
-<div class="cta-wrap" id="cta">
-  <a class="cta-btn" href="https://ayaanahmed.format.com/home" target="_blank" rel="noopener">
-    <span>Visit Portfolio</span>
-    <svg viewBox="0 0 14 14" fill="none">
-      <path d="M2 12L12 2M12 2H5.5M12 2V8.5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </a>
+<a href="/" class="logo-mobile">
+    <img src="assets/logo.svg" alt="Ayaan Ahmed Studios">
+</a>
+
+<nav class="desktop-nav">
+<a href="portfolio/graphic-design.html">Graphic Design</a>
+<a href="portfolio/photography.html">Photography</a>
+<a href="portfolio/videography.html">Videography</a>
+</nav>
+
+<div class="menu-icon" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+</header>
+
+<div class="menu-overlay" id="mobile-menu">
+<a href="portfolio/graphic-design.html">Graphic Design</a>
+<a href="portfolio/photography.html">Photography</a>
+<a href="portfolio/videography.html">Videography</a>
+<div style="width: 40px; height: 1px; background: var(--accent-color); margin: 20px 0; opacity: 0.5;"></div>
+<a href="about.html" style="font-weight: 400; font-size: 1.5rem; opacity: 0.8; letter-spacing: 1px; text-transform: uppercase;">About Me</a>
 </div>
 
-<script>
-  // ── Favicon: geometric "A" — two cream legs, teal crossbar ──────────────
-  const faviconSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#161818"/><text x="16" y="26" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-weight="800" font-size="26" fill="#e8e4de">A</text></svg>`;
+<main class="hero-section">
+<div class="grid-base"></div>
+<div class="grid-highlight" id="grid-highlight"></div>
+<div class="hero-content">
+<img src="assets/logo.svg" alt="Ayaan Ahmed" class="hero-logo protected-image">
+<h1>Graphic Designer<br><span class="light-amp">&</span> Creative</h1>
+<div class="hero-accent-line"></div>
+<a href="about.html" id="main-cta" class="cta-button">About Me</a>
+</div>
+</main>
 
-  const fav = document.createElement('link');
-  fav.rel  = 'icon';
-  fav.type = 'image/svg+xml';
-  fav.href = 'data:image/svg+xml;base64,' + btoa(faviconSVG);
-  document.head.appendChild(fav);
+<footer class="footer">
+<div class="copyright">© <span id="copyright-year">2026</span> <strong>Ayaan Ahmed Studios</strong></div>
 
+<div class="footer-right">
+<button class="contact-btn" id="contact-btn">
+    <span class="contact-label">Contact</span>
+    <span class="contact-success" style="display:none;">
+        <svg width="12" height="10" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 5L4.5 8.5L11.5 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Email Copied
+    </span>
+</button>
 
-  // ── Name build ───────────────────────────────────────────────────────────
-  const WORDS  = ['Ayaan', 'Ahmed'];
-  const nameEl = document.getElementById('name');
-  const letters = [];
+<div class="social-icons">
+<a href="https://instagram.com/bluetigerincstudios" target="_blank" class="icon-link"><img src="assets/instagram-icon.svg" alt="Instagram"></a>
+<a href="https://www.linkedin.com/in/ayaanahmedofficial/" target="_blank" class="icon-link">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+<path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
+</svg>
+</a>
+</div>
+</div>
+</footer>
 
-  WORDS.forEach((word, wi) => {
-    if (wi === 1) {
-      const gap = document.createElement('span');
-      gap.className = 'word-gap';
-      nameEl.appendChild(gap);
-    }
-    word.split('').forEach(ch => {
-      const s = document.createElement('span');
-      s.className    = 'letter';
-      s.textContent  = ch;
-
-      nameEl.appendChild(s);
-      letters.push(s);
-    });
-  });
-
-
-  // ── Entry animation ──────────────────────────────────────────────────────
-  function easeOutExpo(t) { return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t); }
-  function easeOutBack(t) {
-    const c1 = 1.70158, c3 = c1 + 1;
-    return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
-  }
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  const N       = letters.length;
-  const maxDist = Math.min(window.innerWidth, window.innerHeight) * 0.7;
-
-  const startStates = letters.map((_, i) => {
-    const angle = (i / N) * Math.PI * 2 + (Math.random() - 0.5) * 1.8;
-    const dist  = maxDist * (0.6 + Math.random() * 0.4);
-    return {
-      x:   Math.cos(angle) * dist,
-      y:   Math.sin(angle) * dist * 0.55,
-      rot: (Math.random() - 0.5) * 320,
-    };
-  });
-
-  const STAGGER   = 55;
-  const ENTRY_DUR = 680;
-  const ENTRY_END = (N - 1) * STAGGER + ENTRY_DUR;
-  const BTN_START = ENTRY_END + 200;
-
-  let btnShown = false;
-  let done     = false;
-  let t0       = null;
-
-  function tick(ts) {
-    if (done) return;
-    if (!t0) t0 = ts;
-    const el = ts - t0;
-
-    letters.forEach((ltr, i) => {
-      const t  = Math.max(0, Math.min(1, (el - i * STAGGER) / ENTRY_DUR));
-      const st = startStates[i];
-      ltr.style.opacity   = Math.min(1, t * 3.5);
-      ltr.style.transform = `translate(${lerp(st.x, 0, easeOutBack(t))}px,${lerp(st.y, 0, easeOutBack(t))}px) rotate(${lerp(st.rot, 0, easeOutExpo(t))}deg)`;
-    });
-
-    if (el >= BTN_START && !btnShown) {
-      btnShown = true;
-      const cta = document.getElementById('cta');
-      cta.style.transition = 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)';
-      cta.style.opacity    = '1';
-      cta.style.transform  = 'translateY(0)';
-    }
-
-    if (el < BTN_START + 900) {
-      requestAnimationFrame(tick);
-    } else {
-      done = true;
-      letters.forEach(l => { l.style.transform = 'none'; l.style.opacity = '1'; });
-    }
-  }
-
-  document.fonts.ready.then(() => requestAnimationFrame(tick));
-</script>
+<script src="js/script.js"></script>
 </body>
 </html>
