@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayaan Ahmed</title>
+<link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+
+<style>
+    .project-container { max-width: 1400px; margin: 0 auto; padding: 40px; padding-bottom: 140px; }
+
+    /* =========================================
+       NAV: LIQUID GLASS DOCK
+       ========================================= */
+    .liquid-dock-container {
+        position: fixed;
+        bottom: 40px; right: 40px; left: auto; transform: none; z-index: 1000;
+        display: flex; align-items: center; justify-content: center; gap: 10px;
+        padding: 10px 20px; width: auto;
+        background: rgba(30, 30, 30, 0.6);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-top: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 60px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+        transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .liquid-dock-container:hover {
+        border-color: rgba(255, 255, 255, 0.4);
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .dock-link {
+        font-family: 'Bricolage Grotesque', sans-serif;
+        font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+        color: rgba(255, 255, 255, 0.7); text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 40px;
+        transition: all 0.3s ease;
+        display: flex; align-items: center; gap: 8px;
+        white-space: nowrap;
+    }
+
+    .dock-link svg { width: 16px; height: 16px; fill: currentColor; opacity: 0.8; transition: transform 0.3s ease; }
+    .dock-link:hover { color: #fff; } 
+    .dock-link.prev:hover svg { transform: translateX(-3px); }
+    .dock-link.next:hover svg { transform: translateX(3px); }
+    .dock-divider { width: 1px; height: 16px; background: rgba(255,255,255,0.15); align-self: center; }
+
+    /* =========================================
+       HEADER JEWEL
+       ========================================= */
+    .header-jewel { margin-bottom: 50px; }
+    .project-category { color: var(--accent-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; display: block; }
+    .jewel-title h1 { font-size: clamp(3rem, 6vw, 6rem); line-height: 0.9; font-weight: 800; margin: 0; letter-spacing: -2px; margin-bottom: 30px; text-wrap: balance; }
+    .jewel-line { width: 100%; height: 1px; background: rgba(255,255,255,0.15); }
+
+    /* =========================================
+       ALIGNED SPLIT LAYOUT (16:9 Image)
+       ========================================= */
+    .aligned-split { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 60px; align-items: start; margin-bottom: 100px; }
+    .left-info-container { display: flex; flex-direction: column; justify-content: flex-start; }
+    
+    .meta-row { display: flex; gap: 60px; align-items: flex-start; margin-bottom: 40px; }
+    .meta-block h4 { color: var(--accent-color); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 4px; opacity: 0.8; letter-spacing: 1px; }
+    .meta-block p { font-size: 0.95rem; color: #fff; font-weight: 500; line-height: 1.3; }
+
+    .intro-text p { font-size: 1.15rem; line-height: 1.6; color: #ccc; margin-bottom: 25px; text-wrap: pretty; max-width: 60ch; }
+    .intro-text p:first-child { color: #fff; font-weight: 400; }
+
+    .right-image-container { width: 100%; position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 2px; }
+    .right-image-container img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* =========================================
+       GALLERY
+       ========================================= */
+    .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; width: 100%; }
+    .gallery-item img { width: 100%; height: auto; display: block; border-radius: 2px; }
+    .full-width { margin-bottom: 30px; }
+    .caption { display: block; margin-top: 10px; color: #666; font-size: 0.85rem; font-style: italic; text-align: right; }
+
+    /* MOBILE RESPONSIVE */
+    @media (max-width: 900px) {
+        .aligned-split { grid-template-columns: 1fr; gap: 40px; }
+        .right-image-container { aspect-ratio: auto; height: auto; }
+        .jewel-title h1 { font-size: 3.5rem; }
+        .meta-row { flex-wrap: wrap; gap: 30px; }
+        .liquid-dock-container { bottom: 20px; right: 50%; left: auto; transform: translateX(50%); padding: 8px 15px; gap: 15px; width: max-content; }
+        .dock-link.prev span, .dock-link.next span { display: none; }
+        .dock-link { padding: 8px; }
+        .dock-link svg { width: 18px; height: 18px; }
+    }
+</style>
+<meta name="robots" content="noimageindex">
+</head>
+<body>
+
+<header class="header">
+    <a href="../index.html" class="logo">Ayaan Ahmed.</a>
+    <nav class="desktop-nav">
+        <a href="../portfolio/graphic-design.html" style="color: #84bdb8;">Graphic Design</a>
+        <a href="../portfolio/photography.html">Photography</a>
+        <a href="../portfolio/videography.html">Videography</a>
+    </nav>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+</header>
+
+<div class="menu-overlay">
+    <div class="close-btn" onclick="toggleMenu()">×</div>
+    <a href="../portfolio/graphic-design.html">Graphic Design</a>
+    <a href="../portfolio/photography.html">Photography</a>
+    <a href="../portfolio/videography.html">Videography</a>
+    <a href="../about.html">About Me</a>
+</div>
+
+<div class="liquid-dock-container animate-on-load">
+    <a href="the-jeff-gang.html" class="dock-link prev">
+        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        <span>Prev</span>
+    </a>
+    
+    <div class="dock-divider"></div>
+    
+    <a href="../portfolio/graphic-design.html" class="dock-link index">
+        <span>Index</span>
+    </a>
+    
+    <div class="dock-divider"></div>
+
+    <a href="blue-tiger-inc-studios.html" class="dock-link next">
+        <span>Next</span>
+        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </a>
+</div>
+
+<main class="project-container">
+    
+    <section class="header-jewel animate-on-load">
+        <div class="jewel-title">
+            <span class="project-category">Brand Identity • 2019 - Present</span>
+            <h1 class="typewriter terminal-cursor">Ayaan Ahmed</h1>
+        </div>
+        <div class="jewel-line"></div>
+    </section>
+
+    <section class="aligned-split animate-on-load">
+        
+        <div class="left-info-container">
+            <div class="meta-row">
+                <div class="meta-block">
+                    <h4>Client</h4>
+                    <p>Personal Branding</p>
+                </div>
+                <div class="meta-block">
+                    <h4>Medium</h4>
+                    <p>Brand Identity</p>
+                </div>
+                <div class="meta-block">
+                    <h4>Tools</h4>
+                    <p>Illustrator<br>Photoshop</p>
+                </div>
+            </div>
+
+            <div class="intro-text">
+                <p>I started developing this brand in the first few days I began learning how to use Illustrator, to reflect my personal identity and the modern, minimal style I often use in my design work. The brand has since been used on projects, videos, assignments and social media.</p>
+                <p>The main logo incorporates multiple concepts and elements, like utilizing the modern Lemon/Milk font, combining the left strokes of the As in my first and last name, and a hidden emoticon within the E and D in my last name.</p>
+            </div>
+        </div>
+
+        <div class="right-image-container">
+            <img src="https://res.cloudinary.com/ayaanahmed/image/upload/f_auto,q_auto/v1768716676/Ayaan_Ahmed_Graphic_Design_Portfolio_2_qvia7k.webp" alt="Ayaan Ahmed Hero" class="protected-image">
+        </div>
+    </section>
+
+    <section class="project-gallery">
+        <div class="gallery-item full-width animate-on-load">
+            <img src="https://picsum.photos/1600/1000" alt="Brand Overview" class="protected-image">
+            <span class="caption">Brand Identity System</span>
+        </div>
+
+        <div class="gallery-grid">
+            <div class="gallery-item animate-on-load">
+                <img src="https://picsum.photos/800/1000" alt="Stationery Design" class="protected-image">
+            </div>
+            <div class="gallery-item animate-on-load">
+                <img src="https://picsum.photos/801/1000" alt="Digital Assets" class="protected-image">
+            </div>
+        </div>
+
+        <div class="gallery-item full-width animate-on-load">
+            <img src="https://picsum.photos/1600/800" alt="Logo Applications" class="protected-image">
+            <span class="caption">Logo Applications</span>
+        </div>
+    </section>
+
+</main>
+
+<footer class="footer">
+<div class="copyright">© 2026 <strong>Ayaan Ahmed Studios</strong></div>
+<div class="footer-right">
+<a class="contact-button">Contact<span class="contact-tooltip">Email me at ayaanahmedstudios@gmail.com</span></a>
+<div class="social-icons">
+<a href="https://instagram.com/bluetigerincstudios" target="_blank" class="icon-link"><img src="../assets/instagram-icon.svg" alt="Instagram"></a>
+<a href="https://www.linkedin.com/in/ayaanahmedofficial/" target="_blank" class="icon-link"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+</div>
+</div>
+</footer>
+<script src="../js/script.js"></script>
+</body>
+</html>
