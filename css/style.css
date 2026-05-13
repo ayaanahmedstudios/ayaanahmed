@@ -82,6 +82,8 @@ img {
 
 .menu-icon { display: none; }
 .menu-overlay { display: none; }
+.menu-divider { display: none; }
+.menu-about-link { display: none; }
 
 .hero-section { width: 100%; padding: 20px; position: relative; }
 .grid-base, .grid-highlight { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; }
@@ -181,7 +183,6 @@ body.home-page .cta-button:hover, .about-text .cta-button:hover {
 .image-wrapper { width: 100%; height: 100%; position: relative; }
 .image-wrapper img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
 
-/* Perfected Overlay Layout */
 .overlay { 
     position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); 
     display: flex; flex-direction: column; justify-content: center; align-items: center; 
@@ -247,7 +248,6 @@ body.home-page .cta-button:hover, .about-text .cta-button:hover {
 .about-text h1 { font-size: 4rem; font-weight: 800; line-height: 0.9; letter-spacing: -2px; margin-bottom: 30px; text-transform: uppercase; }
 .about-text p { font-size: 1.1rem; line-height: 1.6; color: #ccc; max-width: 500px; margin-bottom: 20px; }
 
-/* Refined Organic Character Glitch */
 .organic-glitch { display: inline-block; white-space: nowrap; }
 .organic-glitch span { display: inline-block; position: relative; animation: charGlitch 4s infinite; animation-delay: calc(var(--i) * 0.15s); transition: font-variation-settings 0.2s; }
 @keyframes charGlitch { 
@@ -282,43 +282,39 @@ body.home-page .cta-button:hover, .about-text .cta-button:hover {
 @media (max-width: 768px) {
     body.home-page { height: auto; min-height: 100dvh; overflow-y: auto; display: block; }
     
-    .header { position: sticky; top: 0; background: rgba(18, 18, 18, 0.98); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0 20px; z-index: 200; height: 90px; }
+    .header { position: sticky; top: 0; background: rgba(18, 18, 18, 0.98); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 0 25px; z-index: 200; height: 90px; }
     .logo { display: none; }
     .logo-mobile { display: block; }
     .logo-mobile img { width: 46px; height: 46px; }
     .desktop-nav { display: none; }
     
-    .menu-icon { display: block; cursor: pointer; width: 22px; height: 14px; position: relative; }
-    .menu-icon span { display: block; position: absolute; height: 2.5px; width: 100%; background: #fff; border-radius: 0; transition: 0.3s ease; }
-    .menu-icon span:nth-child(1) { top: 0px; }
-    .menu-icon span:nth-child(2) { top: 6px; }
-    .menu-icon span:nth-child(3) { top: 12px; }
-    .menu-icon.open span:nth-child(1) { top: 6px; transform: rotate(45deg); }
-    .menu-icon.open span:nth-child(2) { opacity: 0; }
-    .menu-icon.open span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+    .menu-icon { display: flex; cursor: pointer; width: 32px; height: 32px; position: relative; align-items: center; justify-content: center; }
+    .menu-icon .icon-close { display: none; }
+    .menu-icon.open .icon-menu { display: none; }
+    .menu-icon.open .icon-close { display: block; }
 
     .menu-overlay { 
         display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
-        background: rgba(18, 18, 18, 0.98); flex-direction: column; justify-content: center; 
-        align-items: flex-start; padding-left: 40px; z-index: 150; 
-    }
-    .menu-overlay::before {
-        content: ''; position: absolute; inset: 0;
-        background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
-        background-size: 24px 24px; opacity: 0.6; pointer-events: none; z-index: -1;
+        background: #121212;
+        flex-direction: column; justify-content: flex-start; align-items: flex-start; 
+        padding-top: 130px; padding-left: 25px; padding-right: 25px; z-index: 150; 
     }
     .menu-overlay.active { display: flex; }
     .menu-overlay a { 
-        font-size: 2.2rem; margin: 15px 0; font-weight: 800; color: #fff; opacity: 0; 
-        transform: translateX(-20px); transition: all 0.4s ease; text-align: left; 
+        font-size: 3rem; margin: 0; padding: 12px 0; font-weight: 800; color: #fff; opacity: 0; 
+        transform: translateY(20px); transition: all 0.4s ease; text-align: left; 
+        letter-spacing: -2px; display: block; width: 100%; line-height: 1;
     }
-    .menu-overlay a:active { color: var(--accent-color); transform: scale(0.95); transition: 0.1s; }
-    .menu-overlay.active a { opacity: 1; transform: translateX(0); }
+    .menu-overlay a:active { color: var(--accent-color); transform: scale(0.98); transition: 0.1s; }
+    .menu-overlay.active a { opacity: 1; transform: translateY(0); }
     
-    body.home-page main.hero-section { min-height: 100dvh; padding-top: 100px; justify-content: flex-start; align-items: flex-start; }
-    .hero-content { align-items: flex-start; padding: 0 25px; margin-top: 8vh; }
+    .menu-divider { width: 100%; height: 1px; background: rgba(255,255,255,0.1); margin: 30px 0; display: block; }
+    .menu-about-link { font-weight: 500 !important; font-size: 1.2rem !important; opacity: 0.7; letter-spacing: 2px !important; text-transform: uppercase; margin-top: auto; padding-bottom: 40px !important; }
+
+    body.home-page main.hero-section { min-height: 100dvh; padding-top: 0; justify-content: flex-start; align-items: center; }
+    .hero-content { width: 100%; align-items: flex-start; padding: 0 25px; margin-top: 40px; margin-bottom: 50px; }
     .hero-logo { display: none; }
-    .hero-content h1 { font-size: clamp(4.5rem, 18vw, 6.5rem); line-height: 0.95; margin-bottom: 20px; text-align: left; }
+    .hero-content h1 { font-size: clamp(4.5rem, 18vw, 6.5rem); line-height: 0.95; margin: 0 0 20px 0; text-align: left; }
     
     .hero-accent-line { display: block; width: 0; height: 2px; background: var(--accent-color); margin: 0 0 30px 0; opacity: 1; animation: lineGrow 0.8s forwards 1s; }
     @keyframes lineGrow { to { width: 140px; } }
@@ -331,10 +327,8 @@ body.home-page .cta-button:hover, .about-text .cta-button:hover {
     .footer-right { flex-direction: row; width: auto; gap: 10px; justify-content: center; align-items: center; }
     .social-icons { border-left: none; padding-left: 0; margin-left: 0; gap: 15px; }
 
-    /* Single Column Mobile Grid */
     .project-grid { grid-template-columns: 1fr; gap: 30px; } 
     
-    /* Low-key permanently visible mobile text */
     .project-card .overlay { 
         opacity: 1; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 50%);
         justify-content: flex-end; align-items: flex-start; padding: 25px; text-align: left;
