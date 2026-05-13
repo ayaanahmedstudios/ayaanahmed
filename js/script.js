@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, index * 150 + 300);
     });
 
-    // Button Toggle Logic (No Width Hardcoding)
     const contactBtns = document.querySelectorAll('.contact-btn');
     const email = 'ayaanahmedstudios@gmail.com';
     let copyTimeouts = new Map();
