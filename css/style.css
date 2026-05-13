@@ -377,4 +377,8 @@ body.home-page .cta-button:active, .about-text .cta-button:active, .error-contai
     .about-text { padding: 50px 35px; } 
     .about-text h1 { font-size: clamp(2.5rem, 12vw, 4rem); margin-bottom: 25px; line-height: 0.95; }
     .about-grid { padding: 40px 25px; gap: 30px; }
+
+    .error-container { min-height: 60vh; }
+    .kinetic-404 { gap: 8px; margin-bottom: 15px; }
+    .error-msg { margin-bottom: 35px; }
 }
