@@ -191,6 +191,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('dragstart', (e) => {
         if (e.target.tagName === 'IMG') e.preventDefault();
     });
+
+    const block = document.getElementById('glitch-block');
+    const digits = document.querySelectorAll('.digit');
+    if(block) {
+        block.addEventListener('click', () => {
+            digits.forEach(digit => {
+                const x = (Math.random() - 0.5) * 40;
+                const y = (Math.random() - 0.5) * 40;
+                const rot = (Math.random() - 0.5) * 30;
+                digit.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+                digit.style.color = 'var(--accent-color)';
+                setTimeout(() => {
+                    digit.style.transform = '';
+                    digit.style.color = '';
+                }, 300);
+            });
+        });
+    }
 });
 
 function toggleMenu() {
