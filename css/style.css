@@ -109,15 +109,20 @@ img {
 }
 .light-amp { font-weight: 300; vertical-align: middle; }
 
-body.home-page .cta-button, .about-text .cta-button {
+/* 404 Specific Elements */
+.kinetic-404 { display: flex; flex-direction: row; gap: 15px; margin-bottom: 20px; cursor: pointer; justify-content: center; align-items: center; width: 100%; opacity: 0; filter: blur(15px); transform: scale(0.95) translateY(20px); animation: cinemaReveal 1s cubic-bezier(0.2, 1, 0.3, 1) forwards; }
+.digit { font-family: 'Syne', sans-serif; font-size: clamp(4.5rem, 15vw, 12rem); font-weight: 800; line-height: 1; color: var(--text-color); transition: transform 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.27), color 0.3s; text-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.error-msg { font-size: clamp(1rem, 4vw, 1.5rem); font-weight: 500; letter-spacing: -0.5px; color: #888; margin-bottom: 40px; opacity: 0; filter: blur(10px); transform: scale(0.95) translateY(20px); animation: cinemaReveal 1s cubic-bezier(0.2, 1, 0.3, 1) 0.5s forwards; max-width: 500px; padding: 0 10px; }
+
+body.home-page .cta-button, .about-text .cta-button, .error-container .cta-button {
     position: relative; display: inline-flex; justify-content: center; align-items: center; width: fit-content;
     padding: 14px 38px; border-radius: 50px; font-size: 1rem; font-weight: 550; font-variation-settings: 'wght' 550;
     color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.12); overflow: hidden; transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1); cursor: pointer;
 }
-body.home-page .cta-button { opacity: 0; animation: cinemaReveal 1s cubic-bezier(0.2, 1, 0.3, 1) 0.8s forwards; }
+body.home-page .cta-button, .error-container .cta-button { opacity: 0; animation: cinemaReveal 1s cubic-bezier(0.2, 1, 0.3, 1) 0.8s forwards; }
 
-body.home-page .cta-button::after, .about-text .cta-button::after {
+body.home-page .cta-button::after, .about-text .cta-button::after, .error-container .cta-button::after {
     content: ''; position: absolute; inset: 0; border-radius: 50px; padding: 1px;
     background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent 50%, rgba(255,255,255,0.05));
     mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -270,7 +275,7 @@ body.home-page .cta-button::after, .about-text .cta-button::after {
 
 @media (hover: hover) {
     .desktop-nav a:hover { opacity: 1; color: var(--accent-color); font-variation-settings: 'wght' 350; }
-    body.home-page .cta-button:hover, .about-text .cta-button:hover { background: rgba(132, 189, 184, 0.1); border-color: rgba(132, 189, 184, 0.4); transform: translateY(-2px); font-variation-settings: 'wght' 350; color: var(--accent-color); }
+    body.home-page .cta-button:hover, .about-text .cta-button:hover, .error-container .cta-button:hover { background: rgba(132, 189, 184, 0.1); border-color: rgba(132, 189, 184, 0.4); transform: translateY(-2px); font-variation-settings: 'wght' 350; color: var(--accent-color); }
     .contact-btn:hover { color: var(--accent-color); font-variation-settings: 'wght' 350; }
     .icon-link:hover { opacity: 1; color: var(--accent-color) !important; }
     .portfolio-marquee:hover span.outline { color: var(--accent-color); -webkit-text-stroke: 0px; }
@@ -284,9 +289,12 @@ body.home-page .cta-button::after, .about-text .cta-button::after {
     .photo-item:hover .photo-overlay h3, .photo-item:hover .photo-overlay span { transform: translateY(0); }
     .about-image:hover img { filter: grayscale(0%); }
     .lightbox-close:hover { color: var(--accent-color); }
+    .kinetic-404:hover .digit:nth-child(1) { transform: translateY(-20px) rotate(-15deg); color: var(--accent-color); }
+    .kinetic-404:hover .digit:nth-child(2) { transform: translateY(10px) scale(0.8); }
+    .kinetic-404:hover .digit:nth-child(3) { transform: translateY(-10px) rotate(10deg) skewX(10deg); color: var(--accent-color); }
 }
 
-body.home-page .cta-button:active, .about-text .cta-button:active, .contact-btn:active {
+body.home-page .cta-button:active, .about-text .cta-button:active, .error-container .cta-button:active, .contact-btn:active {
     transform: translateY(0) scale(0.98); 
 }
 
