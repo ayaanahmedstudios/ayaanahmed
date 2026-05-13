@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctaBtn = document.getElementById('main-cta');
     if (ctaBtn) {
         if (isMobile) {
-            ctaBtn.setAttribute('href', 'portfolio/graphic-design.html');
+            ctaBtn.setAttribute('href', '/portfolio/graphic-design.html');
             ctaBtn.textContent = 'View Work';
         } else {
-            ctaBtn.setAttribute('href', 'about.html');
+            ctaBtn.setAttribute('href', '/about.html');
             ctaBtn.textContent = 'About Me';
         }
     }
@@ -73,17 +73,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const label = btn.querySelector('.contact-label');
             const success = btn.querySelector('.contact-success');
             
-            label.style.display = 'none';
-            success.style.display = 'flex';
+            if (label && success) {
+                label.style.display = 'none';
+                success.style.display = 'flex';
 
-            if (copyTimeouts.has(index)) clearTimeout(copyTimeouts.get(index));
-            
-            const timeout = setTimeout(() => {
-                success.style.display = 'none';
-                label.style.display = 'flex';
-            }, 2500);
-            
-            copyTimeouts.set(index, timeout);
+                if (copyTimeouts.has(index)) clearTimeout(copyTimeouts.get(index));
+                
+                const timeout = setTimeout(() => {
+                    success.style.display = 'none';
+                    label.style.display = 'flex';
+                }, 2500);
+                
+                copyTimeouts.set(index, timeout);
+            }
         });
     });
 
