@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctaBtn = document.getElementById('main-cta');
     if (ctaBtn) {
         if (isMobile) {
-            ctaBtn.setAttribute('href', '/portfolio/graphic-design.html');
+            ctaBtn.setAttribute('href', '../portfolio/graphic-design.html');
             ctaBtn.textContent = 'View Work';
         } else {
-            ctaBtn.setAttribute('href', '/about.html');
+            ctaBtn.setAttribute('href', '../about.html');
             ctaBtn.textContent = 'About Me';
         }
     }
