@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+    // Prevent orphans in project titles gracefully
+    const projectTitles = document.querySelectorAll('.overlay h2');
+    projectTitles.forEach(title => {
+        const text = title.innerHTML.trim();
+        const lastSpaceIndex = text.lastIndexOf(' ');
+        if (lastSpaceIndex !== -1) {
+            title.innerHTML = text.substring(0, lastSpaceIndex) + '&nbsp;' + text.substring(lastSpaceIndex + 1);
+        }
+    });
+
     const yearEl = document.getElementById('copyright-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
