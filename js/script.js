@@ -1,5 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
     
+    // Auto-Orphan Prevention for Project Titles
+    const projectTitles = document.querySelectorAll('.overlay h2');
+    projectTitles.forEach(title => {
+        const text = title.innerHTML.trim();
+        const lastSpaceIndex = text.lastIndexOf(' ');
+        if (lastSpaceIndex !== -1) {
+            title.innerHTML = text.substring(0, lastSpaceIndex) + '&nbsp;' + text.substring(lastSpaceIndex + 1);
+        }
+    });
+
+    // Tactile Ripple Effect for Buttons
+    document.querySelectorAll('.tactile-btn').forEach(btn => {
+        btn.addEventListener('pointerdown', function(e) {
+            let ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            let rect = this.getBoundingClientRect();
+            let size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+
     const yearEl = document.getElementById('copyright-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -65,10 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
     contactBtns.forEach((btn, index) => {
         btn.addEventListener('click', () => {
             navigator.clipboard.writeText(email);
-
-            btn.classList.remove('fidget-pop');
-            void btn.offsetWidth; 
-            btn.classList.add('fidget-pop');
 
             const label = btn.querySelector('.contact-label');
             const success = btn.querySelector('.contact-success');
@@ -162,6 +183,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Trigger animations for index title sequentially
+    setTimeout(() => {
+        const heroTitle = document.querySelector('.hero-title');
+        if(heroTitle) heroTitle.classList.add('animate-title');
+    }, 100);
+
     const typewriters = document.querySelectorAll('.typewriter');
     typewriters.forEach(el => {
         const text = el.textContent;
@@ -194,24 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('dragstart', (e) => {
         if (e.target.tagName === 'IMG') e.preventDefault();
     });
-
-    const block = document.getElementById('glitch-block');
-    const digits = document.querySelectorAll('.digit');
-    if(block) {
-        block.addEventListener('click', () => {
-            digits.forEach(digit => {
-                const x = (Math.random() - 0.5) * 40;
-                const y = (Math.random() - 0.5) * 40;
-                const rot = (Math.random() - 0.5) * 30;
-                digit.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
-                digit.style.color = 'var(--accent-color)';
-                setTimeout(() => {
-                    digit.style.transform = '';
-                    digit.style.color = '';
-                }, 300);
-            });
-        });
-    }
 });
 
 function toggleMenu() {
