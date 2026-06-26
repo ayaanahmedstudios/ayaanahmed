@@ -1,15 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Prevent orphans in project titles gracefully
-    const projectTitles = document.querySelectorAll('.overlay h2');
-    projectTitles.forEach(title => {
-        const text = title.innerHTML.trim();
-        const lastSpaceIndex = text.lastIndexOf(' ');
-        if (lastSpaceIndex !== -1) {
-            title.innerHTML = text.substring(0, lastSpaceIndex) + '&nbsp;' + text.substring(lastSpaceIndex + 1);
-        }
-    });
-
     const yearEl = document.getElementById('copyright-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -163,9 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox(); });
 
-    const portfolioItems = document.querySelectorAll('.project-card, .photo-item, .video-card, .animate-on-load, .project-top-nav');
-    if (portfolioItems.length > 0) {
-        portfolioItems.forEach((item, index) => {
+    // Inner project page animations only
+    const innerPageItems = document.querySelectorAll('.animate-on-load, .project-top-nav');
+    if (innerPageItems.length > 0) {
+        innerPageItems.forEach((item, index) => {
             item.style.animationDelay = `${index * 0.08}s`; 
             item.classList.add('animate-in');
         });
@@ -231,16 +222,12 @@ function toggleMenu() {
     if (isVisible) {
         menuOverlay.classList.remove('active'); 
         menuIcon.classList.remove('open');
-        setTimeout(() => {
-             menuOverlay.style.display = 'none';
-        }, 400); 
+        document.body.classList.remove('menu-open-active');
         document.body.style.overflow = '';
     } else {
-        menuOverlay.style.display = 'flex';
+        menuOverlay.classList.add('active');
         menuIcon.classList.add('open');
-        requestAnimationFrame(() => {
-            menuOverlay.classList.add('active');
-        });
+        document.body.classList.add('menu-open-active');
         document.body.style.overflow = 'hidden';
     }
 }
