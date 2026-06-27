@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Auto-Orphan Prevention for Project Titles
+    // Graceful Anti-Orphan Logic for Project Titles (Prevents clipping and lonely words)
     const projectTitles = document.querySelectorAll('.overlay h2');
     projectTitles.forEach(title => {
         const text = title.innerHTML.trim();
@@ -8,21 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (lastSpaceIndex !== -1) {
             title.innerHTML = text.substring(0, lastSpaceIndex) + '&nbsp;' + text.substring(lastSpaceIndex + 1);
         }
-    });
-
-    // Tactile Ripple Effect for Buttons
-    document.querySelectorAll('.tactile-btn').forEach(btn => {
-        btn.addEventListener('pointerdown', function(e) {
-            let ripple = document.createElement('span');
-            ripple.classList.add('ripple');
-            let rect = this.getBoundingClientRect();
-            let size = Math.max(rect.width, rect.height);
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
-            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
-            this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-        });
     });
 
     const yearEl = document.getElementById('copyright-year');
@@ -38,6 +23,37 @@ document.addEventListener('DOMContentLoaded', () => {
             ctaBtn.setAttribute('href', '../about.html');
             ctaBtn.textContent = 'About Me';
         }
+    }
+
+    // Tactile Ripple Effect exclusively for mobile Liquid Glass buttons and thumbnails
+    document.querySelectorAll('.tactile-btn, .tactile-card').forEach(btn => {
+        btn.addEventListener('pointerdown', function(e) {
+            let ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            let rect = this.getBoundingClientRect();
+            let size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+    
+    // Attach tactile ripple to mobile footer contact button ONLY on mobile screens
+    const mobileContactBtn = document.querySelector('.contact-btn');
+    if (mobileContactBtn && window.innerWidth <= 768) {
+        mobileContactBtn.addEventListener('pointerdown', function(e) {
+            let ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            let rect = this.getBoundingClientRect();
+            let size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
     }
 
     const gridHighlight = document.querySelector('.grid-highlight');
@@ -174,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox(); });
 
-    // Inner project page animations only
     const innerPageItems = document.querySelectorAll('.animate-on-load, .project-top-nav');
     if (innerPageItems.length > 0) {
         innerPageItems.forEach((item, index) => {
@@ -182,12 +197,6 @@ document.addEventListener('DOMContentLoaded', () => {
             item.classList.add('animate-in');
         });
     }
-
-    // Trigger animations for index title sequentially
-    setTimeout(() => {
-        const heroTitle = document.querySelector('.hero-title');
-        if(heroTitle) heroTitle.classList.add('animate-title');
-    }, 100);
 
     const typewriters = document.querySelectorAll('.typewriter');
     typewriters.forEach(el => {
