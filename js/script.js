@@ -1,14 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // Graceful Anti-Orphan Logic for Project Titles (Prevents clipping and lonely words)
-    const projectTitles = document.querySelectorAll('.overlay h2');
-    projectTitles.forEach(title => {
-        const text = title.innerHTML.trim();
-        const lastSpaceIndex = text.lastIndexOf(' ');
-        if (lastSpaceIndex !== -1) {
-            title.innerHTML = text.substring(0, lastSpaceIndex) + '&nbsp;' + text.substring(lastSpaceIndex + 1);
-        }
-    });
 
     const yearEl = document.getElementById('copyright-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -25,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Tactile Ripple Effect exclusively for Liquid Glass buttons and mobile thumbnails
+    // Tactile Ripple Effect strictly for mobile elements and designated liquid buttons
     document.querySelectorAll('.tactile-btn, .tactile-card').forEach(btn => {
         btn.addEventListener('pointerdown', function(e) {
             let ripple = document.createElement('span');
@@ -39,6 +29,22 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => ripple.remove(), 600);
         });
     });
+    
+    // Tactile ripple for mobile footer contact button ONLY on mobile size
+    const mobileContactBtn = document.querySelector('.mobile-liquid');
+    if (mobileContactBtn && window.innerWidth <= 768) {
+        mobileContactBtn.addEventListener('pointerdown', function(e) {
+            let ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            let rect = this.getBoundingClientRect();
+            let size = Math.max(rect.width, rect.height);
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    }
 
     const gridHighlight = document.querySelector('.grid-highlight');
     if (gridHighlight && window.matchMedia('(pointer: fine)').matches) {
@@ -173,6 +179,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
     if (lightbox) lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox(); });
+
+    // Inner project page animations only
+    const innerPageItems = document.querySelectorAll('.animate-on-load, .project-top-nav');
+    if (innerPageItems.length > 0) {
+        innerPageItems.forEach((item, index) => {
+            item.style.animationDelay = `${index * 0.08}s`; 
+            item.classList.add('animate-in');
+        });
+    }
 
     // Trigger animations for index title sequentially (mobile)
     setTimeout(() => {
