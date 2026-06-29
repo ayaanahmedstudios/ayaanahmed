@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // Graceful Anti-Orphan Logic for Project Titles
+    const projectTitles = document.querySelectorAll('.overlay h2');
+    projectTitles.forEach(title => {
+        const text = title.innerHTML.trim();
+        const lastSpaceIndex = text.lastIndexOf(' ');
+        if (lastSpaceIndex !== -1) {
+            title.innerHTML = text.substring(0, lastSpaceIndex) + '&nbsp;' + text.substring(lastSpaceIndex + 1);
+        }
+    });
+
     const yearEl = document.getElementById('copyright-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -15,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Tactile Ripple Effect strictly for mobile elements and designated liquid buttons
+    // Tactile Ripple Effect exclusively for mobile elements and designated liquid buttons
     document.querySelectorAll('.tactile-btn, .tactile-card').forEach(btn => {
         btn.addEventListener('pointerdown', function(e) {
             let ripple = document.createElement('span');
@@ -29,22 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => ripple.remove(), 600);
         });
     });
-    
-    // Tactile ripple for mobile footer contact button ONLY on mobile size
-    const mobileContactBtn = document.querySelector('.mobile-liquid');
-    if (mobileContactBtn && window.innerWidth <= 768) {
-        mobileContactBtn.addEventListener('pointerdown', function(e) {
-            let ripple = document.createElement('span');
-            ripple.classList.add('ripple');
-            let rect = this.getBoundingClientRect();
-            let size = Math.max(rect.width, rect.height);
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${e.clientX - rect.left - size/2}px`;
-            ripple.style.top = `${e.clientY - rect.top - size/2}px`;
-            this.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 600);
-        });
-    }
 
     const gridHighlight = document.querySelector('.grid-highlight');
     if (gridHighlight && window.matchMedia('(pointer: fine)').matches) {
@@ -69,19 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const logo = document.querySelector('.logo');
-    if (logo && !logo.classList.contains('animated')) {
-        const text = logo.innerText;
-        logo.innerHTML = '';
-        logo.classList.add('animated');
-        text.split('').forEach((char, index) => {
-            const span = document.createElement('span');
-            span.innerText = char === ' ' ? '\u00A0' : char;
-            span.style.animationDelay = `${index * 0.05}s`;
-            logo.appendChild(span);
-        });
-    }
-
     const navLinks = document.querySelectorAll('.desktop-nav a');
     navLinks.forEach((link, index) => {
         setTimeout(() => {
@@ -89,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, index * 150 + 300);
     });
 
+    // Ensure all variants of the contact button trigger the copy event securely
     const contactBtns = document.querySelectorAll('.contact-btn');
     const email = 'ayaanahmedstudios@gmail.com';
     let copyTimeouts = new Map();
@@ -195,6 +177,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if(heroTitle) heroTitle.classList.add('animate-title');
     }, 100);
 
+    // Watch for header changes to remove menu border securely
+    const menuOverlay = document.querySelector('.menu-overlay');
+    if (menuOverlay) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.target.classList.contains('active')) {
+                    document.querySelector('.header').style.borderBottom = 'none';
+                } else {
+                    document.querySelector('.header').style.borderBottom = '';
+                }
+            });
+        });
+        observer.observe(menuOverlay, { attributes: true, attributeFilter: ['class'] });
+    }
+
     const typewriters = document.querySelectorAll('.typewriter');
     typewriters.forEach(el => {
         const text = el.textContent;
@@ -222,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(styleSheet);
 
     document.addEventListener('contextmenu', (e) => {
-        if (e.target.tagName === 'IMG' || e.target.classList.contains('photo-overlay')) e.preventDefault();
+        if (e.target.tagName === 'IMG') e.preventDefault();
     });
     document.addEventListener('dragstart', (e) => {
         if (e.target.tagName === 'IMG') e.preventDefault();
