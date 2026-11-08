@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ayaan Ahmed</title>
-  <meta name="description" content="Ayaan Ahmed — Graphic Designer and Photographer.">
-  <link id="site-favicon" rel="icon" type="image/svg+xml" href="https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg">
+  <meta name="description" content="Ayaan Ahmed — Graphic designer and photographer.">
+  <link rel="icon" type="image/svg+xml" id="dynamic-favicon" href="https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg">
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,28 +15,28 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>
     :root,
-    html[data-theme="dark"] {
+    [data-theme="dark"] {
       --bg: #0D0D0C;
-      --text: #F4F3EF;
-      --body: #B5B3AD;
-      --muted: #787670;
+      --text: #F5F4F0;
+      --body: #B5B4AE;
+      --secondary: #9E9D97;
+      --muted: #6E6D68;
       --border: #222220;
       --surface: #161614;
       --surface-hover: #20201D;
-      --invert-bg: #F4F3EF;
-      --invert-text: #0D0D0C;
+      --accent: #D6D3C9;
     }
 
-    html[data-theme="light"] {
+    [data-theme="light"] {
       --bg: #FAF9F5;
       --text: #141413;
-      --body: #454440;
-      --muted: #8C8B85;
-      --border: #E6E4DD;
-      --surface: #F1EFE9;
-      --surface-hover: #E7E4DC;
-      --invert-bg: #141413;
-      --invert-text: #FAF9F5;
+      --body: #42413D;
+      --secondary: #575653;
+      --muted: #86857F;
+      --border: #E5E3DC;
+      --surface: #F0EFE9;
+      --surface-hover: #E6E3DA;
+      --accent: #5C5952;
     }
 
     * {
@@ -65,56 +65,43 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      transition: background-color 0.25s ease, color 0.25s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .scroll-progress {
+    .scroll-progress-track {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: var(--text);
-      transform-origin: 0 50%;
-      transform: scaleX(0);
-      opacity: 0;
-      z-index: 100;
+      background: transparent;
+      z-index: 9999;
       pointer-events: none;
-      transition: opacity 0.2s ease, background-color 0.25s ease;
+      opacity: 0;
+      transition: opacity 0.25s ease;
     }
 
-    .scroll-progress.is-scrollable {
+    .scroll-progress-track.is-scrollable {
       opacity: 1;
+    }
+
+    .scroll-progress-bar {
+      width: 100%;
+      height: 100%;
+      background-color: var(--text);
+      transform-origin: 0% 50%;
+      transform: scaleX(0);
     }
 
     .page-shell {
       width: 100%;
-      max-width: 1140px;
+      max-width: 1180px;
       margin: 0 auto;
-      padding: 44px 48px 34px;
+      padding: 48px 48px 36px;
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-    }
-
-    .hairline {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background-color: var(--border);
-      transform-origin: left center;
-      pointer-events: none;
-      transition: background-color 0.25s ease;
-    }
-
-    .hairline-top {
-      top: 0;
-    }
-
-    .hairline-bottom {
-      bottom: 0;
     }
 
     header {
@@ -123,29 +110,42 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding-bottom: 18px;
-      margin-bottom: 48px;
+      padding-bottom: 20px;
+      margin-bottom: 44px;
+    }
+
+    .header-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--border);
+      transform-origin: left center;
+      overflow: hidden;
+      transition: background-color 0.3s ease;
     }
 
     .brand-name {
       font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 1.03125rem;
+      font-size: 1.0625rem;
       font-weight: 500;
       letter-spacing: -0.018em;
       color: var(--text);
+      text-decoration: none;
       display: inline-block;
-      transition: color 0.25s ease;
+      transition: color 0.3s ease;
     }
 
-    .header-meta {
-      display: inline-flex;
+    .header-right {
+      display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
     .header-clock {
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       font-weight: 400;
       font-variant-numeric: tabular-nums;
       color: var(--muted);
@@ -153,7 +153,14 @@
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      transition: color 0.25s ease;
+      gap: 6px;
+      transition: color 0.3s ease;
+    }
+
+    .clock-prefix {
+      color: var(--secondary);
+      font-weight: 500;
+      transition: color 0.3s ease;
     }
 
     .theme-toggle {
@@ -161,14 +168,14 @@
       border: none;
       background: transparent;
       color: var(--muted);
-      padding: 2px;
+      padding: 4px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       line-height: 1;
-      transition: color 0.2s ease;
+      transition: color 0.2s ease, transform 0.2s ease;
     }
 
     .theme-toggle:hover {
@@ -178,54 +185,17 @@
     .theme-toggle:focus-visible {
       outline: 1.5px solid var(--text);
       outline-offset: 4px;
-      border-radius: 3px;
+      border-radius: 4px;
     }
 
-    .theme-toggle i {
-      display: inline-block;
-      will-change: transform;
-    }
-
-    .odometer {
-      display: inline-flex;
-      align-items: center;
-      overflow: hidden;
-      line-height: 1.2;
-    }
-
-    .odo-slot {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      height: 1.2em;
-    }
-
-    .odo-space {
-      display: inline-block;
-      width: 0.28em;
-    }
-
-    .odo-char {
-      display: inline-block;
-      will-change: transform, opacity;
-    }
-
-    .main-grid {
+    main {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 44px;
+      grid-template-columns: minmax(320px, 470px) minmax(340px, 540px);
+      justify-content: space-between;
       align-items: start;
-      margin-bottom: 52px;
-    }
-
-    @media (min-width: 960px) {
-      .main-grid {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-        gap: 68px;
-        align-items: center;
-      }
+      gap: 64px;
+      margin: auto 0;
+      padding: 8px 0 28px;
     }
 
     .left-column {
@@ -234,126 +204,87 @@
       gap: 38px;
     }
 
-    .heading-stage {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 4px 0 10px;
-      margin-bottom: 18px;
-    }
-
-    .intro h1 {
-      position: relative;
-      z-index: 2;
+    .hero-heading {
       font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.88rem, 3.05vw, 2.45rem);
+      font-size: clamp(1.95rem, 3.1vw, 2.55rem);
       font-weight: 500;
-      line-height: 1.32;
-      letter-spacing: -0.026em;
+      line-height: 1.18;
+      letter-spacing: -0.03em;
       color: var(--text);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      column-gap: 0.28em;
-      row-gap: 0.22em;
-    }
-
-    .role-token {
-      position: relative;
-      display: inline-grid;
-      align-items: center;
-      white-space: nowrap;
-      cursor: pointer;
+      margin-bottom: 22px;
+      cursor: default;
       user-select: none;
-      padding: 2px 8px;
-      margin: -2px -8px;
-      border-radius: 6px;
+      -webkit-user-select: none;
     }
 
-    .role-base,
-    .role-invert {
-      grid-area: 1 / 1;
+    .word-wrap {
       display: inline-block;
-      pointer-events: none;
+      white-space: nowrap;
+      vertical-align: bottom;
     }
 
-    .role-base {
+    .char-mask {
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      vertical-align: bottom;
+      line-height: 1.14;
+      padding-bottom: 0.03em;
+      margin-bottom: -0.03em;
+    }
+
+    .char-track {
+      display: block;
+      position: relative;
+      will-change: transform, clip-path;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .char-orig {
+      display: block;
       color: var(--text);
-      transition: color 0.25s ease;
+      font-weight: 500;
+      transition: color 0.3s ease;
     }
 
-    .role-invert {
-      color: var(--invert-text);
-      background-color: var(--invert-bg);
-      padding: 2px 8px;
-      margin: -2px -8px;
-      border-radius: 6px;
-      clip-path: inset(0% 100% 0% 0% round 6px);
-      will-change: clip-path;
-      transition: background-color 0.25s ease, color 0.25s ease;
-    }
-
-    .role-baseline {
+    .char-accent,
+    .char-clone {
+      display: block;
       position: absolute;
-      left: 8px;
-      right: 8px;
-      bottom: -3px;
-      height: 1.5px;
-      background-color: var(--text);
-      transform-origin: 0% 50%;
-      transform: scaleX(0);
-      opacity: 0.85;
-      pointer-events: none;
-      will-change: transform, opacity;
-      transition: background-color 0.25s ease;
-    }
-
-    .h1-conj {
-      display: inline-block;
-      color: var(--muted);
-      font-weight: 400;
-      padding: 0 2px;
-      transition: color 0.25s ease;
-    }
-
-    .kinetic-emblem {
-      flex-shrink: 0;
-      width: 34px;
-      height: 34px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-      opacity: 0.9;
-      pointer-events: none;
-    }
-
-    .kinetic-emblem svg {
+      left: 0;
       width: 100%;
-      height: 100%;
-      overflow: visible;
+      font-weight: 500;
+      pointer-events: none;
+    }
+
+    .char-accent {
+      top: 100%;
+      color: var(--bg);
+      background-color: var(--text);
+      border-radius: 3px;
+      transition: color 0.3s ease, background-color 0.3s ease;
+    }
+
+    .char-clone {
+      top: 200%;
+      color: var(--text);
+      transition: color 0.3s ease;
     }
 
     .bio-copy {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      max-width: 56ch;
-    }
-
-    .bio-clip {
-      overflow: hidden;
+      background: transparent;
     }
 
     .bio-copy p {
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 1.03125rem;
-      line-height: 1.7;
+      line-height: 1.72;
       color: var(--body);
-      will-change: transform, opacity;
-      transition: color 0.25s ease;
+      background: transparent;
+      transition: color 0.3s ease;
     }
 
     .links-list {
@@ -362,24 +293,44 @@
       flex-direction: column;
     }
 
+    .row-border-top,
+    .row-border-bottom {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--border);
+      transform-origin: left center;
+      pointer-events: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .row-border-top {
+      top: 0;
+    }
+
+    .row-border-bottom {
+      bottom: 0;
+    }
+
     .link-row {
       position: relative;
-      min-height: 52px;
+      min-height: 54px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 12px 0;
+      padding: 13px 4px;
       text-decoration: none;
       color: var(--text);
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 1rem;
-      transition: opacity 0.2s ease, color 0.25s ease;
+      transition: opacity 0.22s ease, color 0.3s ease;
     }
 
     @media (hover: hover) {
       .links-list:hover .link-row {
-        opacity: 0.4;
+        opacity: 0.42;
       }
 
       .links-list .link-row:hover {
@@ -390,7 +341,7 @@
     .row-label {
       color: var(--text);
       font-weight: 400;
-      transition: color 0.25s ease;
+      transition: color 0.3s ease;
     }
 
     .row-icon {
@@ -398,13 +349,13 @@
       align-items: center;
       justify-content: center;
       color: var(--muted);
-      font-size: 1rem;
-      transition: transform 0.2s ease, color 0.25s ease;
+      font-size: 1.0625rem;
+      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), color 0.22s ease;
     }
 
     @media (hover: hover) {
       a.link-row:hover .row-icon {
-        transform: translate(2px, -2px);
+        transform: translate(3px, -3px);
         color: var(--text);
       }
     }
@@ -419,9 +370,9 @@
       font-weight: 500;
       letter-spacing: -0.01em;
       line-height: 1;
-      padding: 8px 13px;
-      min-height: 32px;
-      border-radius: 6px;
+      padding: 9px 15px;
+      min-height: 36px;
+      border-radius: 7px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -434,9 +385,7 @@
     }
 
     .copy-trigger:focus-visible,
-    a.link-row:focus-visible,
-    .ig-card-link:focus-visible,
-    .footer-logo-link:focus-visible {
+    a.link-row:focus-visible {
       outline: 1.5px solid var(--text);
       outline-offset: 2px;
     }
@@ -454,54 +403,69 @@
     .ig-card {
       width: 100%;
       border: 1px solid var(--border);
-      border-radius: 10px;
+      border-radius: 12px;
       background-color: var(--surface);
       overflow: hidden;
-      will-change: transform, opacity;
-      transition: border-color 0.25s ease, background-color 0.25s ease;
+      transition: border-color 0.3s ease, background-color 0.3s ease;
     }
 
     .ig-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      padding: 11px 15px;
+      padding: 13px 16px;
       border-bottom: 1px solid var(--border);
-      background-color: var(--surface);
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 0.84375rem;
-      transition: border-color 0.25s ease, background-color 0.25s ease;
-    }
-
-    .ig-handle {
-      color: var(--text);
-      font-weight: 500;
-      letter-spacing: -0.01em;
+      background-color: var(--bg);
       text-decoration: none;
-      transition: color 0.2s ease;
+      color: var(--text);
+      transition: background-color 0.2s ease, border-color 0.3s ease, color 0.3s ease;
     }
 
-    .ig-card-link {
+    .ig-card-header:hover {
+      background-color: var(--surface);
+    }
+
+    .ig-handle-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.90625rem;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .ig-handle-wrap i {
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+
+    .ig-header-action {
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      font-size: 0.8125rem;
       color: var(--muted);
-      text-decoration: none;
       transition: color 0.2s ease;
     }
 
-    .ig-card-link:hover,
-    .ig-handle:hover {
+    .ig-card-header:hover .ig-header-action {
       color: var(--text);
     }
 
     .ig-crop-viewport {
       width: 100%;
+      aspect-ratio: 3 / 1.88;
       overflow: hidden;
-      background-color: var(--surface);
       position: relative;
-      transition: background-color 0.25s ease;
+      background-color: var(--surface);
+    }
+
+    .ig-embed-shift {
+      position: absolute;
+      top: -168px;
+      left: -2px;
+      right: -2px;
     }
 
     .ig-top-mask {
@@ -513,7 +477,7 @@
       background-color: var(--surface);
       z-index: 5;
       pointer-events: none;
-      transition: background-color 0.25s ease;
+      transition: background-color 0.3s ease;
     }
 
     .ig-bottom-mask {
@@ -521,63 +485,65 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 6px;
+      height: 4px;
       background-color: var(--surface);
       z-index: 5;
       pointer-events: none;
-      transition: background-color 0.25s ease;
+      transition: background-color 0.3s ease;
     }
 
-    .ig-embed-shift {
-      margin-top: -158px;
-      margin-bottom: -124px;
-      width: 100%;
-    }
-
-    .ig-embed-shift .instagram-media,
-    .ig-embed-shift iframe {
+    .ig-crop-viewport .instagram-media,
+    .ig-crop-viewport iframe {
       width: 100% !important;
       min-width: 100% !important;
       max-width: 100% !important;
       margin: 0 !important;
       border: 0 !important;
       box-shadow: none !important;
-      display: block !important;
     }
 
     footer {
       position: relative;
+      margin-top: 32px;
       padding-top: 20px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      gap: 12px;
+      gap: 16px;
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 0.875rem;
+      font-size: 0.90625rem;
       font-variant-numeric: tabular-nums;
       color: var(--muted);
-      transition: color 0.25s ease;
+      transition: color 0.3s ease;
     }
 
-    .footer-brand {
+    .footer-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--border);
+      transform-origin: left center;
+      overflow: hidden;
+      transition: background-color 0.3s ease;
+    }
+
+    .footer-copy {
       justify-self: start;
-      white-space: nowrap;
     }
 
-    .footer-logo-link {
+    .footer-logo-wrap {
       justify-self: center;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 8px;
-      border-radius: 6px;
-      text-decoration: none;
     }
 
-    .footer-logo-mask {
+    .footer-brand-logo {
       display: inline-block;
-      width: 56px;
-      height: 20px;
+      width: 58px;
+      height: 22px;
       background-color: var(--muted);
       -webkit-mask-image: url('https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg');
       mask-image: url('https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg');
@@ -587,39 +553,31 @@
       mask-repeat: no-repeat;
       -webkit-mask-position: center;
       mask-position: center;
-      transition: background-color 0.2s ease;
-    }
-
-    .footer-logo-link:hover .footer-logo-mask {
-      background-color: var(--text);
+      transition: background-color 0.3s ease;
     }
 
     .footer-timer {
       justify-self: end;
       display: inline-flex;
       align-items: center;
-      white-space: nowrap;
     }
 
-    @media (max-width: 959px) {
+    @media (max-width: 920px) {
       .page-shell {
-        max-width: 640px;
-        padding: 38px 28px 30px;
+        max-width: 600px;
+        padding: 36px 24px 32px;
       }
 
-      header {
-        margin-bottom: 38px;
-      }
-
-      .main-grid {
-        gap: 40px;
-        margin-bottom: 44px;
+      main {
+        grid-template-columns: 1fr;
+        gap: 42px;
+        margin: 0;
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 520px) {
       .page-shell {
-        padding: 26px 20px 26px;
+        padding: 28px 20px 28px;
       }
 
       header {
@@ -628,15 +586,15 @@
       }
 
       .brand-name {
-        font-size: 1.0625rem;
+        font-size: 1.15rem;
       }
 
-      .header-meta {
+      .header-right {
         gap: 12px;
       }
 
       .header-clock {
-        font-size: 0.9375rem;
+        font-size: 0.96875rem;
       }
 
       .theme-toggle {
@@ -644,26 +602,23 @@
         padding: 4px;
       }
 
+      main {
+        gap: 38px;
+        padding: 4px 0 20px;
+      }
+
       .left-column {
-        gap: 34px;
+        gap: 32px;
       }
 
-      .heading-stage {
-        margin-bottom: 20px;
-      }
-
-      .intro h1 {
-        font-size: clamp(1.95rem, 8.2vw, 2.35rem);
-        line-height: 1.34;
-      }
-
-      .kinetic-emblem {
-        width: 30px;
-        height: 30px;
+      .hero-heading {
+        font-size: clamp(2rem, 8.4vw, 2.45rem);
+        line-height: 1.18;
+        margin-bottom: 18px;
       }
 
       .bio-copy {
-        gap: 18px;
+        gap: 16px;
       }
 
       .bio-copy p {
@@ -673,500 +628,298 @@
 
       .link-row {
         min-height: 58px;
-        padding: 15px 0;
+        padding: 15px 2px;
         font-size: 1.09375rem;
       }
 
       .row-icon {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
       }
 
       .copy-trigger {
-        font-size: 0.96875rem;
-        min-height: 40px;
+        min-height: 42px;
         padding: 10px 16px;
+        font-size: 0.96875rem;
+        border-radius: 8px;
       }
 
       .ig-card-header {
-        font-size: 0.9375rem;
         padding: 14px 16px;
       }
 
+      .ig-handle-wrap {
+        font-size: 0.96875rem;
+      }
+
+      .ig-header-action {
+        font-size: 0.875rem;
+      }
+
       .ig-embed-shift {
-        margin-top: -162px;
-        margin-bottom: -128px;
+        top: -170px;
       }
 
       footer {
+        margin-top: 24px;
+        padding-top: 18px;
         font-size: 0.9375rem;
-        padding-top: 20px;
       }
 
-      .footer-logo-mask {
-        width: 68px;
-        height: 24px;
+      .footer-brand-logo {
+        width: 52px;
+        height: 20px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+  <div class="scroll-progress-track" id="scroll-progress-track" aria-hidden="true">
+    <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
+  </div>
 
   <div class="page-shell">
     <header>
       <span class="brand-name" id="header-brand">Ayaan Ahmed</span>
-      <div class="header-meta" id="header-meta">
-        <span class="header-clock odometer" id="est-clock" aria-label="Current EST time"></span>
-        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch color theme">
+      <div class="header-right" id="header-right">
+        <span class="header-clock" id="est-clock" aria-label="Current EST time">
+          <span class="clock-prefix">EST</span>
+          <span id="est-time-val">--:--:-- --</span>
+        </span>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
           <i class="ph ph-sun" id="theme-icon" aria-hidden="true"></i>
         </button>
       </div>
-      <span class="hairline hairline-bottom" id="header-line"></span>
+      <div class="header-line"></div>
     </header>
 
-    <main class="main-grid">
+    <main>
       <div class="left-column">
         <section class="intro">
-          <div class="heading-stage" id="heading-stage">
-            <h1 id="hero-heading">
-              <span class="role-token" id="token-gd" data-role="gd">
-                <span class="role-base">Graphic Designer</span>
-                <span class="role-invert" id="invert-gd" aria-hidden="true">Graphic Designer</span>
-                <span class="role-baseline" id="line-gd" aria-hidden="true"></span>
-              </span>
-              <span class="h1-conj" id="phrase-and">and</span>
-              <span class="role-token" id="token-ph" data-role="ph">
-                <span class="role-base">Photographer.</span>
-                <span class="role-invert" id="invert-ph" aria-hidden="true">Photographer.</span>
-                <span class="role-baseline" id="line-ph" aria-hidden="true"></span>
-              </span>
-            </h1>
-
-            <div class="kinetic-emblem" aria-hidden="true">
-              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <g id="emblem-vec">
-                  <line x1="6" y1="26" x2="26" y2="6" stroke-dasharray="2 2" opacity="0.55"></line>
-                  <circle cx="6" cy="26" r="2.2" fill="var(--bg)"></circle>
-                  <circle cx="26" cy="6" r="2.2" fill="var(--bg)"></circle>
-                  <rect x="13" y="13" width="6" height="6" fill="var(--bg)"></rect>
-                </g>
-                <g id="emblem-cam" opacity="0">
-                  <path d="M5 10V6H9M23 6H27V10M27 22V26H23M9 26H5V22"></path>
-                  <circle cx="16" cy="16" r="5.5"></circle>
-                  <circle cx="16" cy="16" r="1.5" fill="currentColor"></circle>
-                </g>
-              </svg>
-            </div>
-          </div>
+          <h1 class="hero-heading" id="hero-heading" aria-label="Graphic Designer and Photographer.">
+            <span class="role-phrase" id="phrase-gd">Graphic Designer</span>
+            <span class="role-conj" id="phrase-and">and</span>
+            <span class="role-phrase" id="phrase-ph">Photographer.</span>
+          </h1>
 
           <div class="bio-copy">
-            <div class="bio-clip">
-              <p class="bio-paragraph">
-                Hi, my name is Ayaan, I'm a graphic designer and photographer, and I'm currently in my final-year studying graphic design at OCAD University.
-              </p>
-            </div>
-            <div class="bio-clip">
-              <p class="bio-paragraph">
-                My design spans across many realms, including branding, print-based, editorial, narrative, and even a bit of web design. I enjoy photographing landscapes, cities, and animals. I also enjoy creating videos, most recently a series of travel documentaries, and numerous reels.
-              </p>
-            </div>
+            <p class="bio-para">
+              Hi, my name is Ayaan, I'm a graphic designer and photographer, and I'm currently in my final-year studying graphic design at OCAD University.
+            </p>
+            <p class="bio-para">
+              My design spans across many realms, including branding, print-based, editorial, narrative, and even a bit of web design. I enjoy photographing landscapes, cities, and animals. I also enjoy creating videos, most recently a series of travel documentaries, and numerous reels.
+            </p>
           </div>
         </section>
 
         <section class="links-section" aria-label="Links">
           <div class="links-list">
-            <span class="hairline hairline-top link-line"></span>
+            <div class="row-border-top"></div>
 
             <a class="link-row" href="https://linkedin.com/in/ayaanahmedstudios" target="_blank" rel="noopener noreferrer">
               <span class="row-label">LinkedIn</span>
-              <span class="row-icon" aria-hidden="true">
-                <i class="ph ph-arrow-up-right"></i>
+              <span class="row-icon">
+                <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
               </span>
-              <span class="hairline hairline-bottom link-line"></span>
+              <div class="row-border-bottom"></div>
             </a>
 
             <a class="link-row" href="https://instagram.com/bluetigerincstudios" target="_blank" rel="noopener noreferrer">
               <span class="row-label">Instagram</span>
-              <span class="row-icon" aria-hidden="true">
-                <i class="ph ph-arrow-up-right"></i>
+              <span class="row-icon">
+                <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
               </span>
-              <span class="hairline hairline-bottom link-line"></span>
+              <div class="row-border-bottom"></div>
             </a>
 
             <a class="link-row" href="https://ayaanahmed.format.com/graphic-design" target="_blank" rel="noopener noreferrer">
               <span class="row-label">Portfolio</span>
-              <span class="row-icon" aria-hidden="true">
-                <i class="ph ph-arrow-up-right"></i>
+              <span class="row-icon">
+                <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
               </span>
-              <span class="hairline hairline-bottom link-line"></span>
+              <div class="row-border-bottom"></div>
             </a>
 
             <div class="link-row">
               <span class="row-label">Email</span>
               <button type="button" class="copy-trigger" id="email-copy-btn">Copy email</button>
-              <span class="hairline hairline-bottom link-line"></span>
+              <div class="row-border-bottom"></div>
             </div>
           </div>
         </section>
       </div>
 
-      <section class="right-column" aria-label="Instagram">
-        <div class="ig-card" id="ig-card">
-          <div class="ig-card-header">
-            <a class="ig-handle" href="https://instagram.com/bluetigerincstudios" target="_blank" rel="noopener noreferrer">
-              @bluetigerincstudios
+      <div class="right-column">
+        <section class="feed-section" aria-label="Instagram">
+          <div class="ig-card" id="ig-card">
+            <a class="ig-card-header" href="https://instagram.com/bluetigerincstudios" target="_blank" rel="noopener noreferrer">
+              <span class="ig-handle-wrap">
+                <i class="ph ph-instagram-logo" aria-hidden="true"></i>
+                <span>@bluetigerincstudios</span>
+              </span>
+              <span class="ig-header-action">
+                <span>Instagram</span>
+                <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+              </span>
             </a>
-            <a class="ig-card-link" href="https://instagram.com/bluetigerincstudios" target="_blank" rel="noopener noreferrer">
-              <span>Instagram</span>
-              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
-            </a>
-          </div>
-          <div class="ig-crop-viewport">
-            <span class="ig-top-mask" aria-hidden="true"></span>
-            <div class="ig-embed-shift">
-              <blockquote
-                class="instagram-media"
-                data-instgrm-permalink="https://www.instagram.com/bluetigerincstudios/?utm_source=ig_embed&amp;utm_campaign=loading"
-                data-instgrm-version="14"
-                style="background:#FFF; border:0; border-radius:0; box-shadow:none; margin:0; max-width:100%; min-width:100%; padding:0; width:100%;">
-              </blockquote>
+
+            <div class="ig-crop-viewport">
+              <div class="ig-top-mask" aria-hidden="true"></div>
+              <div class="ig-embed-shift">
+                <blockquote
+                  class="instagram-media"
+                  data-instgrm-permalink="https://www.instagram.com/bluetigerincstudios/?utm_source=ig_embed&amp;utm_campaign=loading"
+                  data-instgrm-version="14"
+                  style="background:#FFF; border:0; border-radius:0; box-shadow:none; margin:0; max-width:100%; min-width:100%; padding:0; width:100%;">
+                </blockquote>
+              </div>
+              <div class="ig-bottom-mask" aria-hidden="true"></div>
             </div>
-            <span class="ig-bottom-mask" aria-hidden="true"></span>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </main>
 
     <footer>
-      <span class="hairline hairline-top" id="footer-line"></span>
-      <span class="footer-brand">&copy; <span id="year"></span> Ayaan Ahmed</span>
-      <a
-        href="https://instagram.com/bluetigerincstudios"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="footer-logo-link"
-        aria-label="Ayaan Ahmed"
-      >
-        <span class="footer-logo-mask"></span>
-      </a>
-      <span class="footer-timer odometer" id="session-timer" aria-label="Time on site"></span>
+      <div class="footer-line"></div>
+      <span class="footer-copy" id="footer-copy">&copy; <span id="year"></span> Ayaan Ahmed</span>
+      <div class="footer-logo-wrap" id="footer-logo-wrap">
+        <span class="footer-brand-logo" role="img" aria-label="Ayaan Ahmed logo"></span>
+      </div>
+      <span class="footer-timer" id="session-timer">0:00</span>
     </footer>
   </div>
 
   <script async src="https://www.instagram.com/embed.js"></script>
   <script>
     (function () {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       document.getElementById('year').textContent = new Date().getFullYear();
+
+      const logoCloudinaryUrl = 'https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg';
+
+      fetch(logoCloudinaryUrl)
+        .then(function (res) { return res.text(); })
+        .then(function (svgText) {
+          const adaptiveSvg = svgText.replace(
+            /<svg([^>]*)>/i,
+            '<svg$1><style>path,polygon,rect,circle,g{fill:#141413 !important;} @media (prefers-color-scheme: dark){path,polygon,rect,circle,g{fill:#FAF9F5 !important;}}</style>'
+          );
+          const encodedFavicon = 'data:image/svg+xml;utf8,' + encodeURIComponent(adaptiveSvg);
+          const favEl = document.getElementById('dynamic-favicon');
+          if (favEl) favEl.setAttribute('href', encodedFavicon);
+        })
+        .catch(function () {});
 
       const rootHtml = document.documentElement;
       const themeToggleBtn = document.getElementById('theme-toggle');
       const themeIcon = document.getElementById('theme-icon');
 
-      function setTheme(themeName, animateIcon) {
-        rootHtml.setAttribute('data-theme', themeName);
-        const nextClass = themeName === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
-        if (animateIcon && window.gsap && !prefersReducedMotion) {
-          gsap.to(themeIcon, {
-            rotate: 90,
-            scale: 0.5,
-            opacity: 0,
-            duration: 0.16,
-            ease: 'power2.in',
-            onComplete: function () {
-              themeIcon.className = nextClass;
-              gsap.fromTo(
-                themeIcon,
-                { rotate: -90, scale: 0.5, opacity: 0 },
-                { rotate: 0, scale: 1, opacity: 1, duration: 0.28, ease: 'back.out(2)' }
-              );
-            }
-          });
+      function applyTheme(theme) {
+        rootHtml.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+          themeIcon.className = 'ph ph-sun';
         } else {
-          themeIcon.className = nextClass;
+          themeIcon.className = 'ph ph-moon';
         }
       }
 
-      setTheme('dark', false);
+      applyTheme('dark');
 
       themeToggleBtn.addEventListener('click', function () {
-        const currentTheme = rootHtml.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-        setTheme(currentTheme === 'dark' ? 'light' : 'dark', true);
+        const currentTheme = rootHtml.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        applyTheme(currentTheme);
+        if (window.gsap) {
+          gsap.fromTo(themeIcon, { rotate: -90, scale: 0.7 }, { rotate: 0, scale: 1, duration: 0.4, ease: 'back.out(2)' });
+        }
       });
 
-      const scrollProgressEl = document.getElementById('scroll-progress');
+      const progressTrack = document.getElementById('scroll-progress-track');
+      const progressBar = document.getElementById('scroll-progress-bar');
 
       function updateScrollProgress() {
         const docEl = document.documentElement;
         const maxScroll = docEl.scrollHeight - docEl.clientHeight;
-        if (maxScroll <= 4) {
-          scrollProgressEl.classList.remove('is-scrollable');
-          scrollProgressEl.style.transform = 'scaleX(0)';
-          return;
+        if (maxScroll > 8) {
+          progressTrack.classList.add('is-scrollable');
+          const ratio = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+          progressBar.style.transform = 'scaleX(' + ratio + ')';
+        } else {
+          progressTrack.classList.remove('is-scrollable');
+          progressBar.style.transform = 'scaleX(0)';
         }
-        scrollProgressEl.classList.add('is-scrollable');
-        const ratio = Math.min(1, Math.max(0, window.scrollY / maxScroll));
-        scrollProgressEl.style.transform = 'scaleX(' + ratio.toFixed(4) + ')';
       }
 
       window.addEventListener('scroll', updateScrollProgress, { passive: true });
       window.addEventListener('resize', updateScrollProgress);
-      updateScrollProgress();
+      setTimeout(updateScrollProgress, 300);
+      setTimeout(updateScrollProgress, 1500);
 
-      if (window.ResizeObserver) {
-        const ro = new ResizeObserver(function () {
-          updateScrollProgress();
+      function buildDualTrackChars(container) {
+        const text = container.textContent.trim();
+        container.textContent = '';
+        const words = text.split(' ');
+        const tracks = [];
+        const masks = [];
+
+        words.forEach(function (word, wIdx) {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'word-wrap';
+
+          for (let i = 0; i < word.length; i++) {
+            const ch = word[i];
+            const mask = document.createElement('span');
+            mask.className = 'char-mask';
+            mask.setAttribute('aria-hidden', 'true');
+
+            const track = document.createElement('span');
+            track.className = 'char-track';
+
+            const orig = document.createElement('span');
+            orig.className = 'char-orig';
+            orig.textContent = ch;
+
+            const accent = document.createElement('span');
+            accent.className = 'char-accent';
+            accent.textContent = ch;
+
+            const clone = document.createElement('span');
+            clone.className = 'char-clone';
+            clone.textContent = ch;
+
+            track.appendChild(orig);
+            track.appendChild(accent);
+            track.appendChild(clone);
+            mask.appendChild(track);
+            wordSpan.appendChild(mask);
+
+            tracks.push(track);
+            masks.push(mask);
+          }
+
+          container.appendChild(wordSpan);
+          if (wIdx < words.length - 1) {
+            container.appendChild(document.createTextNode(' '));
+          }
         });
-        ro.observe(document.body);
+
+        return { tracks: tracks, masks: masks };
       }
 
-      const logoUrl = 'https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg';
-      const faviconEl = document.getElementById('site-favicon');
-
-      fetch(logoUrl)
-        .then(function (res) { return res.text(); })
-        .then(function (svgText) {
-          const styledFaviconSvg = svgText.replace(
-            /<svg([^>]*)>/i,
-            '<svg$1><style>* { fill: #141413 !important; stroke: #141413 !important; } @media (prefers-color-scheme: dark) { * { fill: #FAF9F5 !important; stroke: #FAF9F5 !important; } }</style>'
-          );
-          faviconEl.href = 'data:image/svg+xml;utf8,' + encodeURIComponent(styledFaviconSvg);
-        })
-        .catch(function () {});
-
-      const tokenGd = document.getElementById('token-gd');
-      const tokenPh = document.getElementById('token-ph');
+      const heroHeading = document.getElementById('hero-heading');
+      const phraseGd = document.getElementById('phrase-gd');
       const phraseAnd = document.getElementById('phrase-and');
-      const invertGd = document.getElementById('invert-gd');
-      const invertPh = document.getElementById('invert-ph');
-      const lineGd = document.getElementById('line-gd');
-      const linePh = document.getElementById('line-ph');
-      const emblemVec = document.getElementById('emblem-vec');
-      const emblemCam = document.getElementById('emblem-cam');
+      const phrasePh = document.getElementById('phrase-ph');
 
-      const clipState = {
-        gdL: 0,
-        gdR: 100,
-        phL: 0,
-        phR: 100
-      };
+      const gdBuilt = buildDualTrackChars(phraseGd);
+      const andBuilt = buildDualTrackChars(phraseAnd);
+      const phBuilt = buildDualTrackChars(phrasePh);
 
-      function applyClipPaths() {
-        invertGd.style.clipPath = 'inset(0% ' + clipState.gdR.toFixed(2) + '% 0% ' + clipState.gdL.toFixed(2) + '% round 6px)';
-        invertPh.style.clipPath = 'inset(0% ' + clipState.phR.toFixed(2) + '% 0% ' + clipState.phL.toFixed(2) + '% round 6px)';
-      }
+      const gdTracks = gdBuilt.tracks;
+      const andTracks = andBuilt.tracks;
+      const phTracks = phBuilt.tracks;
+      const allTracks = gdTracks.concat(andTracks, phTracks);
+      const allMasks = gdBuilt.masks.concat(andBuilt.masks, phBuilt.masks);
 
-      let headingMasterTl = null;
-      let resumeLoopTimer = null;
-
-      function switchEmblem(mode) {
-        if (!window.gsap || prefersReducedMotion) return;
-        if (mode === 'gd') {
-          gsap.to(emblemVec, { opacity: 1, scale: 1, rotate: 0, transformOrigin: '50% 50%', duration: 0.55, ease: 'expo.out', overwrite: 'auto' });
-          gsap.to(emblemCam, { opacity: 0, scale: 0.65, rotate: -45, transformOrigin: '50% 50%', duration: 0.4, ease: 'power2.in', overwrite: 'auto' });
-        } else {
-          gsap.to(emblemVec, { opacity: 0, scale: 0.65, rotate: 45, transformOrigin: '50% 50%', duration: 0.4, ease: 'power2.in', overwrite: 'auto' });
-          gsap.to(emblemCam, { opacity: 1, scale: 1, rotate: 0, transformOrigin: '50% 50%', duration: 0.55, ease: 'expo.out', overwrite: 'auto' });
-        }
-      }
-
-      function buildHeadingChoreography() {
-        if (!window.gsap || prefersReducedMotion) return;
-        if (headingMasterTl) {
-          headingMasterTl.kill();
-        }
-
-        clipState.gdL = 0;
-        clipState.gdR = 100;
-        clipState.phL = 0;
-        clipState.phR = 100;
-        applyClipPaths();
-
-        gsap.set([lineGd, linePh], { scaleX: 0, transformOrigin: '0% 50%' });
-
-        headingMasterTl = gsap.timeline({
-          repeat: -1,
-          onUpdate: applyClipPaths
-        });
-
-        headingMasterTl
-          .add(function () { switchEmblem('gd'); })
-          .to(clipState, { gdL: 0, gdR: 0, duration: 0.85, ease: 'expo.inOut' }, 'gdIn')
-          .to(lineGd, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.85, ease: 'expo.inOut' }, 'gdIn')
-          .to({}, { duration: 1.25 })
-
-          .add(function () { switchEmblem('ph'); }, 'transitionToPh')
-          .to(clipState, { gdL: 100, gdR: 0, duration: 0.78, ease: 'expo.inOut' }, 'transitionToPh')
-          .to(lineGd, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.72, ease: 'expo.inOut' }, 'transitionToPh')
-          .fromTo(
-            clipState,
-            { phL: 0, phR: 100 },
-            { phL: 0, phR: 0, duration: 0.85, ease: 'expo.inOut', immediateRender: false },
-            'transitionToPh+=0.1'
-          )
-          .to(linePh, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.85, ease: 'expo.inOut' }, 'transitionToPh+=0.1')
-          .to({}, { duration: 1.25 })
-
-          .to(clipState, { phL: 100, phR: 0, duration: 0.78, ease: 'expo.inOut' }, 'phOut')
-          .to(linePh, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.72, ease: 'expo.inOut' }, 'phOut')
-
-          .add(function () { switchEmblem('gd'); }, 'dualUnderline')
-          .set(clipState, { gdL: 0, gdR: 100, phL: 0, phR: 100 }, 'dualUnderline')
-          .to([lineGd, linePh], {
-            scaleX: 1,
-            transformOrigin: '0% 50%',
-            duration: 0.7,
-            stagger: 0.1,
-            ease: 'expo.out'
-          }, 'dualUnderline')
-          .to({}, { duration: 1.0 })
-          .to([lineGd, linePh], {
-            scaleX: 0,
-            transformOrigin: '100% 50%',
-            duration: 0.6,
-            stagger: 0.08,
-            ease: 'power3.inOut'
-          });
-      }
-
-      function bindRoleScrub(tokenEl, roleKey) {
-        tokenEl.addEventListener('pointermove', function (e) {
-          if (!window.gsap || prefersReducedMotion) return;
-          if (headingMasterTl) headingMasterTl.pause();
-          if (resumeLoopTimer) clearTimeout(resumeLoopTimer);
-
-          const rect = tokenEl.getBoundingClientRect();
-          const relX = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-          const centerPct = relX * 100;
-          const halfWindow = 28;
-          const leftVal = Math.max(0, centerPct - halfWindow);
-          const rightVal = Math.max(0, 100 - (centerPct + halfWindow));
-
-          switchEmblem(roleKey);
-
-          if (roleKey === 'gd') {
-            gsap.to(clipState, {
-              gdL: leftVal,
-              gdR: rightVal,
-              phL: 0,
-              phR: 100,
-              duration: 0.28,
-              ease: 'power3.out',
-              overwrite: 'auto',
-              onUpdate: applyClipPaths
-            });
-            gsap.to(lineGd, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.3, overwrite: 'auto' });
-            gsap.to(linePh, { scaleX: 0, duration: 0.25, overwrite: 'auto' });
-          } else {
-            gsap.to(clipState, {
-              phL: leftVal,
-              phR: rightVal,
-              gdL: 0,
-              gdR: 100,
-              duration: 0.28,
-              ease: 'power3.out',
-              overwrite: 'auto',
-              onUpdate: applyClipPaths
-            });
-            gsap.to(linePh, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.3, overwrite: 'auto' });
-            gsap.to(lineGd, { scaleX: 0, duration: 0.25, overwrite: 'auto' });
-          }
-        });
-
-        tokenEl.addEventListener('pointerleave', function () {
-          if (!window.gsap || prefersReducedMotion) return;
-          if (resumeLoopTimer) clearTimeout(resumeLoopTimer);
-          resumeLoopTimer = setTimeout(function () {
-            buildHeadingChoreography();
-          }, 600);
-        });
-
-        tokenEl.addEventListener('click', function () {
-          if (!window.gsap || prefersReducedMotion) return;
-          if (headingMasterTl) headingMasterTl.pause();
-          if (resumeLoopTimer) clearTimeout(resumeLoopTimer);
-
-          switchEmblem(roleKey);
-
-          if (roleKey === 'gd') {
-            gsap.to(clipState, {
-              gdL: 0,
-              gdR: 0,
-              phL: 0,
-              phR: 100,
-              duration: 0.5,
-              ease: 'expo.out',
-              overwrite: 'auto',
-              onUpdate: applyClipPaths
-            });
-            gsap.to(lineGd, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.45, overwrite: 'auto' });
-            gsap.to(linePh, { scaleX: 0, duration: 0.3, overwrite: 'auto' });
-          } else {
-            gsap.to(clipState, {
-              phL: 0,
-              phR: 0,
-              gdL: 0,
-              gdR: 100,
-              duration: 0.5,
-              ease: 'expo.out',
-              overwrite: 'auto',
-              onUpdate: applyClipPaths
-            });
-            gsap.to(linePh, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.45, overwrite: 'auto' });
-            gsap.to(lineGd, { scaleX: 0, duration: 0.3, overwrite: 'auto' });
-          }
-
-          resumeLoopTimer = setTimeout(function () {
-            buildHeadingChoreography();
-          }, 2200);
-        });
-      }
-
-      bindRoleScrub(tokenGd, 'gd');
-      bindRoleScrub(tokenPh, 'ph');
-
-      function updateOdometer(container, nextText, prevText) {
-        if (!window.gsap || prefersReducedMotion) {
-          container.textContent = nextText;
-          return;
-        }
-
-        if (container.children.length !== nextText.length) {
-          container.innerHTML = '';
-          for (let i = 0; i < nextText.length; i++) {
-            const ch = nextText[i];
-            const slot = document.createElement('span');
-            slot.className = ch === ' ' ? 'odo-space' : 'odo-slot';
-            const inner = document.createElement('span');
-            inner.className = 'odo-char';
-            inner.textContent = ch === ' ' ? '\u00A0' : ch;
-            slot.appendChild(inner);
-            container.appendChild(slot);
-          }
-          return;
-        }
-
-        for (let i = 0; i < nextText.length; i++) {
-          const ch = nextText[i];
-          const slot = container.children[i];
-          const inner = slot.firstElementChild;
-          if (!prevText || prevText[i] !== ch) {
-            slot.className = ch === ' ' ? 'odo-space' : 'odo-slot';
-            inner.textContent = ch === ' ' ? '\u00A0' : ch;
-            if (ch !== ' ') {
-              gsap.killTweensOf(inner);
-              gsap.fromTo(
-                inner,
-                { yPercent: 100, opacity: 0.2 },
-                { yPercent: 0, opacity: 1, duration: 0.32, ease: 'power3.out' }
-              );
-            }
-          }
-        }
-      }
-
-      const clockEl = document.getElementById('est-clock');
-      let lastClockStr = '';
+      const clockValEl = document.getElementById('est-time-val');
       const timeFormatter = new Intl.DateTimeFormat('en-US', {
         timeZone: 'America/Toronto',
         hour: 'numeric',
@@ -1176,11 +929,7 @@
       });
 
       function updateClock() {
-        const nextStr = 'EST ' + timeFormatter.format(new Date());
-        if (nextStr !== lastClockStr) {
-          updateOdometer(clockEl, nextStr, lastClockStr);
-          lastClockStr = nextStr;
-        }
+        clockValEl.textContent = timeFormatter.format(new Date());
       }
 
       updateClock();
@@ -1188,7 +937,6 @@
 
       const sessionEl = document.getElementById('session-timer');
       const startTimestamp = Date.now();
-      let lastSessionStr = '';
 
       function pad2(num) {
         return String(num).padStart(2, '0');
@@ -1200,86 +948,154 @@
         const minutes = Math.floor((elapsedSeconds % 3600) / 60);
         const seconds = elapsedSeconds % 60;
 
-        const nextStr = hours > 0
-          ? hours + ':' + pad2(minutes) + ':' + pad2(seconds)
-          : minutes + ':' + pad2(seconds);
-
-        if (nextStr !== lastSessionStr) {
-          updateOdometer(sessionEl, nextStr, lastSessionStr);
-          lastSessionStr = nextStr;
+        if (hours > 0) {
+          sessionEl.textContent = hours + ':' + pad2(minutes) + ':' + pad2(seconds);
+        } else {
+          sessionEl.textContent = minutes + ':' + pad2(seconds);
         }
       }
 
       updateSessionTimer();
       setInterval(updateSessionTimer, 1000);
 
-      if (window.gsap && !prefersReducedMotion) {
-        const introTl = gsap.timeline({
-          defaults: { ease: 'power3.out' },
-          onComplete: buildHeadingChoreography
+      let isPointerOverHeading = false;
+      let masterLoop = null;
+
+      if (window.gsap) {
+        const buildIn = gsap.timeline({
+          defaults: { ease: 'expo.out' },
+          onComplete: function () {
+            gsap.set('.bio-para, .link-row, #header-brand, #header-right, #ig-card, #footer-copy, #footer-logo-wrap, #session-timer', {
+              clearProps: 'transform,opacity'
+            });
+            startHeroChoreography();
+          }
         });
 
-        introTl
-          .fromTo(
-            '#header-line',
-            { scaleX: 0 },
-            { scaleX: 1, duration: 0.85, ease: 'expo.out' },
-            0
-          )
-          .fromTo(
-            ['#header-brand', '#header-meta'],
-            { y: 10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.65, stagger: 0.06 },
-            0.05
-          )
-          .fromTo(
-            [tokenGd, phraseAnd, tokenPh, '.kinetic-emblem'],
-            { y: 14, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.72, stagger: 0.06, ease: 'expo.out' },
-            0.12
-          )
-          .fromTo(
-            '.bio-paragraph',
-            { yPercent: 100, opacity: 0 },
-            { yPercent: 0, opacity: 1, duration: 0.72, stagger: 0.08 },
-            0.24
-          )
-          .fromTo(
-            '.link-line',
-            { scaleX: 0 },
-            { scaleX: 1, duration: 0.75, stagger: 0.05, ease: 'expo.out' },
-            0.28
-          )
-          .fromTo(
-            '.link-row',
-            { y: 10, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.58,
-              stagger: 0.05,
-              clearProps: 'opacity,transform'
-            },
-            0.32
-          )
-          .fromTo(
-            '#ig-card',
-            { y: 16, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.8 },
-            0.26
-          )
-          .fromTo(
-            '#footer-line',
-            { scaleX: 0 },
-            { scaleX: 1, duration: 0.8, ease: 'expo.out' },
-            0.42
-          )
-          .fromTo(
-            ['.footer-brand', '.footer-logo-link', '#session-timer'],
-            { y: 10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.6, stagger: 0.05 },
-            0.46
-          );
+        gsap.set(['.header-line', '.row-border-top', '.row-border-bottom', '.footer-line'], { scaleX: 0 });
+        gsap.set(['#header-brand', '#header-right'], { opacity: 0, y: 10 });
+        gsap.set(allTracks, { yPercent: 110, clipPath: 'inset(0% 0% 0% 0%)' });
+        gsap.set('.bio-para', { opacity: 0, y: 14 });
+        gsap.set('.link-row', { opacity: 0, y: 12 });
+        gsap.set('#ig-card', { opacity: 0, y: 18 });
+        gsap.set(['#footer-copy', '#footer-logo-wrap', '#session-timer'], { opacity: 0, y: 8 });
+
+        buildIn
+          .to('.header-line', { scaleX: 1, duration: 0.9 }, 0)
+          .to(['#header-brand', '#header-right'], { opacity: 1, y: 0, duration: 0.7, stagger: 0.06 }, 0.08)
+          .to(allTracks, {
+            yPercent: 0,
+            duration: 0.88,
+            stagger: 0.022,
+            ease: 'expo.out'
+          }, 0.14)
+          .to('.bio-para', { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 }, 0.42)
+          .to(['.row-border-top', '.row-border-bottom'], { scaleX: 1, duration: 0.75, stagger: 0.05 }, 0.48)
+          .to('.link-row', { opacity: 1, y: 0, duration: 0.65, stagger: 0.055 }, 0.52)
+          .to('#ig-card', { opacity: 1, y: 0, duration: 0.85 }, 0.42)
+          .to('.footer-line', { scaleX: 1, duration: 0.85 }, 0.6)
+          .to(['#footer-copy', '#footer-logo-wrap', '#session-timer'], { opacity: 1, y: 0, duration: 0.65, stagger: 0.06 }, 0.68);
+
+        function startHeroChoreography() {
+          masterLoop = gsap.timeline({ repeat: -1, repeatDelay: 1.6 });
+
+          masterLoop
+            .to(gdTracks, {
+              yPercent: -100,
+              duration: 0.52,
+              stagger: 0.024,
+              ease: 'expo.inOut'
+            })
+            .to(gdTracks, {
+              yPercent: -200,
+              duration: 0.52,
+              stagger: 0.024,
+              ease: 'expo.inOut'
+            }, '+=0.18')
+            .set(gdTracks, { yPercent: 0 })
+            .to(phTracks, {
+              yPercent: -100,
+              duration: 0.52,
+              stagger: 0.024,
+              ease: 'expo.inOut'
+            }, '-=0.25')
+            .to(phTracks, {
+              yPercent: -200,
+              duration: 0.52,
+              stagger: 0.024,
+              ease: 'expo.inOut'
+            }, '+=0.18')
+            .set(phTracks, { yPercent: 0 })
+            .to(allTracks, {
+              clipPath: 'inset(0% 0% 100% 0%)',
+              yPercent: -35,
+              duration: 0.36,
+              stagger: { each: 0.018, from: 'center' },
+              ease: 'power3.in'
+            }, '+=1.4')
+            .set(allTracks, {
+              clipPath: 'inset(100% 0% 0% 0%)',
+              yPercent: 45
+            })
+            .to(allTracks, {
+              clipPath: 'inset(0% 0% 0% 0%)',
+              yPercent: 0,
+              duration: 0.62,
+              stagger: { each: 0.02, from: 'center' },
+              ease: 'power4.out'
+            })
+            .to(allTracks, {
+              yPercent: -18,
+              duration: 0.24,
+              stagger: 0.018,
+              ease: 'power2.out'
+            }, '+=1.4')
+            .to(allTracks, {
+              yPercent: 0,
+              duration: 0.72,
+              stagger: 0.018,
+              ease: 'elastic.out(1, 0.5)'
+            }, '<0.12');
+        }
+
+        const quickYList = allTracks.map(function (track) {
+          return gsap.quickTo(track, 'yPercent', { duration: 0.36, ease: 'power3.out' });
+        });
+
+        heroHeading.addEventListener('pointerenter', function () {
+          isPointerOverHeading = true;
+          if (masterLoop) masterLoop.pause();
+          gsap.set(allTracks, { clipPath: 'inset(0% 0% 0% 0%)' });
+        });
+
+        heroHeading.addEventListener('pointermove', function (e) {
+          if (!isPointerOverHeading) return;
+          for (let i = 0; i < allMasks.length; i++) {
+            const rect = allMasks[i].getBoundingClientRect();
+            const cx = rect.left + rect.width * 0.5;
+            const cy = rect.top + rect.height * 0.5;
+            const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
+            const radius = 84;
+            if (dist < radius) {
+              const factor = Math.cos((dist / radius) * (Math.PI * 0.5));
+              quickYList[i](-16 * factor);
+            } else {
+              quickYList[i](0);
+            }
+          }
+        });
+
+        heroHeading.addEventListener('pointerleave', function () {
+          isPointerOverHeading = false;
+          for (let i = 0; i < quickYList.length; i++) {
+            quickYList[i](0);
+          }
+          gsap.delayedCall(0.38, function () {
+            if (!isPointerOverHeading && masterLoop) {
+              masterLoop.restart(true);
+            }
+          });
+        });
       }
 
       const copyBtn = document.getElementById('email-copy-btn');
