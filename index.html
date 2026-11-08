@@ -18,11 +18,13 @@
     html[data-theme="dark"] {
       --bg: #0D0D0C;
       --text: #F4F3EF;
-      --body: #A8A6A0;
-      --muted: #706F6A;
+      --body: #B5B3AD;
+      --muted: #787670;
       --border: #222220;
       --surface: #161614;
-      --surface-hover: #1F1F1C;
+      --surface-hover: #20201D;
+      --invert-bg: #F4F3EF;
+      --invert-text: #0D0D0C;
     }
 
     html[data-theme="light"] {
@@ -33,6 +35,8 @@
       --border: #E6E4DD;
       --surface: #F1EFE9;
       --surface-hover: #E7E4DC;
+      --invert-bg: #141413;
+      --invert-text: #FAF9F5;
     }
 
     * {
@@ -230,83 +234,106 @@
       gap: 38px;
     }
 
-    .hero-stage {
+    .heading-stage {
       position: relative;
-      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 4px 0 10px;
+      margin-bottom: 18px;
     }
 
     .intro h1 {
+      position: relative;
+      z-index: 2;
       font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.88rem, 3.05vw, 2.48rem);
+      font-size: clamp(1.88rem, 3.05vw, 2.45rem);
       font-weight: 500;
-      line-height: 1.28;
+      line-height: 1.32;
       letter-spacing: -0.026em;
       color: var(--text);
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
       column-gap: 0.28em;
-      row-gap: 0.16em;
+      row-gap: 0.22em;
     }
 
-    .h1-token {
+    .role-token {
       position: relative;
-      display: inline-flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      column-gap: 0.26em;
-      padding-bottom: 4px;
-      cursor: default;
-      will-change: opacity;
-    }
-
-    .h1-token-conj {
-      padding-bottom: 4px;
-    }
-
-    .word-unit {
-      display: inline-flex;
+      display: inline-grid;
+      align-items: center;
       white-space: nowrap;
-      align-items: baseline;
+      cursor: pointer;
+      user-select: none;
+      padding: 2px 8px;
+      margin: -2px -8px;
+      border-radius: 6px;
     }
 
-    .char-mask {
-      position: relative;
+    .role-base,
+    .role-invert {
+      grid-area: 1 / 1;
       display: inline-block;
-      overflow: hidden;
-      line-height: 1.22;
-      padding-bottom: 0.06em;
-      margin-bottom: -0.06em;
-      vertical-align: bottom;
+      pointer-events: none;
     }
 
-    .char-top {
-      display: inline-block;
-      will-change: transform;
+    .role-base {
+      color: var(--text);
+      transition: color 0.25s ease;
     }
 
-    .char-bottom {
+    .role-invert {
+      color: var(--invert-text);
+      background-color: var(--invert-bg);
+      padding: 2px 8px;
+      margin: -2px -8px;
+      border-radius: 6px;
+      clip-path: inset(0% 100% 0% 0% round 6px);
+      will-change: clip-path;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .role-baseline {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: inline-block;
-      will-change: transform;
-    }
-
-    .phrase-baseline {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      left: 8px;
+      right: 8px;
+      bottom: -3px;
       height: 1.5px;
       background-color: var(--text);
-      transform-origin: left center;
+      transform-origin: 0% 50%;
       transform: scaleX(0);
+      opacity: 0.85;
       pointer-events: none;
       will-change: transform, opacity;
       transition: background-color 0.25s ease;
+    }
+
+    .h1-conj {
+      display: inline-block;
+      color: var(--muted);
+      font-weight: 400;
+      padding: 0 2px;
+      transition: color 0.25s ease;
+    }
+
+    .kinetic-emblem {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .kinetic-emblem svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
     }
 
     .bio-copy {
@@ -472,13 +499,38 @@
     .ig-crop-viewport {
       width: 100%;
       overflow: hidden;
-      background-color: #FFFFFF;
+      background-color: var(--surface);
       position: relative;
+      transition: background-color 0.25s ease;
+    }
+
+    .ig-top-mask {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--surface);
+      z-index: 5;
+      pointer-events: none;
+      transition: background-color 0.25s ease;
+    }
+
+    .ig-bottom-mask {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background-color: var(--surface);
+      z-index: 5;
+      pointer-events: none;
+      transition: background-color 0.25s ease;
     }
 
     .ig-embed-shift {
-      margin-top: -100px;
-      margin-bottom: -52px;
+      margin-top: -158px;
+      margin-bottom: -124px;
       width: 100%;
     }
 
@@ -567,12 +619,12 @@
 
     @media (max-width: 640px) {
       .page-shell {
-        padding: 26px 20px 24px;
+        padding: 26px 20px 26px;
       }
 
       header {
         margin-bottom: 32px;
-        padding-bottom: 15px;
+        padding-bottom: 16px;
       }
 
       .brand-name {
@@ -580,64 +632,79 @@
       }
 
       .header-meta {
-        gap: 10px;
+        gap: 12px;
       }
 
       .header-clock {
-        font-size: 0.84375rem;
+        font-size: 0.9375rem;
+      }
+
+      .theme-toggle {
+        font-size: 1.2rem;
+        padding: 4px;
       }
 
       .left-column {
-        gap: 32px;
+        gap: 34px;
       }
 
-      .hero-stage {
-        margin-bottom: 18px;
+      .heading-stage {
+        margin-bottom: 20px;
       }
 
       .intro h1 {
-        font-size: clamp(1.78rem, 7vw, 2.18rem);
-        line-height: 1.26;
+        font-size: clamp(1.95rem, 8.2vw, 2.35rem);
+        line-height: 1.34;
+      }
+
+      .kinetic-emblem {
+        width: 30px;
+        height: 30px;
       }
 
       .bio-copy {
-        gap: 15px;
+        gap: 18px;
       }
 
       .bio-copy p {
-        font-size: 1.0625rem;
-        line-height: 1.66;
+        font-size: 1.125rem;
+        line-height: 1.68;
       }
 
       .link-row {
-        min-height: 54px;
-        padding: 13px 0;
-        font-size: 1.0625rem;
+        min-height: 58px;
+        padding: 15px 0;
+        font-size: 1.09375rem;
       }
 
       .row-icon {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
       }
 
       .copy-trigger {
+        font-size: 0.96875rem;
+        min-height: 40px;
+        padding: 10px 16px;
+      }
+
+      .ig-card-header {
         font-size: 0.9375rem;
-        min-height: 36px;
-        padding: 8px 14px;
+        padding: 14px 16px;
       }
 
       .ig-embed-shift {
-        margin-top: -96px;
-        margin-bottom: -50px;
+        margin-top: -162px;
+        margin-bottom: -128px;
       }
 
       footer {
-        font-size: 0.84375rem;
-        padding-top: 18px;
+        font-size: 0.9375rem;
+        padding-top: 20px;
       }
 
       .footer-logo-mask {
-        width: 48px;
-        height: 18px;
+        width: 68px;
+        height: 24px;
       }
     }
   </style>
@@ -660,20 +727,36 @@
     <main class="main-grid">
       <div class="left-column">
         <section class="intro">
-          <div class="hero-stage" id="hero-stage">
-            <h1 id="hero-heading" aria-label="Graphic Designer and Photographer.">
-              <span class="h1-token" id="phrase-gd" data-phrase="Graphic Designer">
-                <span class="phrase-text">Graphic Designer</span>
-                <span class="phrase-baseline" id="rule-gd" aria-hidden="true"></span>
+          <div class="heading-stage" id="heading-stage">
+            <h1 id="hero-heading">
+              <span class="role-token" id="token-gd" data-role="gd">
+                <span class="role-base">Graphic Designer</span>
+                <span class="role-invert" id="invert-gd" aria-hidden="true">Graphic Designer</span>
+                <span class="role-baseline" id="line-gd" aria-hidden="true"></span>
               </span>
-              <span class="h1-token h1-token-conj" id="phrase-and" data-phrase="and">
-                <span class="phrase-text">and</span>
-              </span>
-              <span class="h1-token" id="phrase-ph" data-phrase="Photographer.">
-                <span class="phrase-text">Photographer.</span>
-                <span class="phrase-baseline" id="rule-ph" aria-hidden="true"></span>
+              <span class="h1-conj" id="phrase-and">and</span>
+              <span class="role-token" id="token-ph" data-role="ph">
+                <span class="role-base">Photographer.</span>
+                <span class="role-invert" id="invert-ph" aria-hidden="true">Photographer.</span>
+                <span class="role-baseline" id="line-ph" aria-hidden="true"></span>
               </span>
             </h1>
+
+            <div class="kinetic-emblem" aria-hidden="true">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <g id="emblem-vec">
+                  <line x1="6" y1="26" x2="26" y2="6" stroke-dasharray="2 2" opacity="0.55"></line>
+                  <circle cx="6" cy="26" r="2.2" fill="var(--bg)"></circle>
+                  <circle cx="26" cy="6" r="2.2" fill="var(--bg)"></circle>
+                  <rect x="13" y="13" width="6" height="6" fill="var(--bg)"></rect>
+                </g>
+                <g id="emblem-cam" opacity="0">
+                  <path d="M5 10V6H9M23 6H27V10M27 22V26H23M9 26H5V22"></path>
+                  <circle cx="16" cy="16" r="5.5"></circle>
+                  <circle cx="16" cy="16" r="1.5" fill="currentColor"></circle>
+                </g>
+              </svg>
+            </div>
           </div>
 
           <div class="bio-copy">
@@ -739,6 +822,7 @@
             </a>
           </div>
           <div class="ig-crop-viewport">
+            <span class="ig-top-mask" aria-hidden="true"></span>
             <div class="ig-embed-shift">
               <blockquote
                 class="instagram-media"
@@ -747,6 +831,7 @@
                 style="background:#FFF; border:0; border-radius:0; box-shadow:none; margin:0; max-width:100%; min-width:100%; padding:0; width:100%;">
               </blockquote>
             </div>
+            <span class="ig-bottom-mask" aria-hidden="true"></span>
           </div>
         </div>
       </section>
@@ -849,168 +934,196 @@
         })
         .catch(function () {});
 
-      function buildSplitPhrase(tokenEl) {
-        const textContainer = tokenEl.querySelector('.phrase-text');
-        const rawText = tokenEl.getAttribute('data-phrase') || textContainer.textContent;
-        textContainer.innerHTML = '';
-        textContainer.setAttribute('aria-hidden', 'true');
+      const tokenGd = document.getElementById('token-gd');
+      const tokenPh = document.getElementById('token-ph');
+      const phraseAnd = document.getElementById('phrase-and');
+      const invertGd = document.getElementById('invert-gd');
+      const invertPh = document.getElementById('invert-ph');
+      const lineGd = document.getElementById('line-gd');
+      const linePh = document.getElementById('line-ph');
+      const emblemVec = document.getElementById('emblem-vec');
+      const emblemCam = document.getElementById('emblem-cam');
 
-        const words = rawText.split(' ');
-        const charMasks = [];
-        const charTops = [];
-        const charBottoms = [];
+      const clipState = {
+        gdL: 0,
+        gdR: 100,
+        phL: 0,
+        phR: 100
+      };
 
-        words.forEach(function (word, wIdx) {
-          const wordSpan = document.createElement('span');
-          wordSpan.className = 'word-unit';
-
-          for (let i = 0; i < word.length; i++) {
-            const ch = word[i];
-            const mask = document.createElement('span');
-            mask.className = 'char-mask';
-
-            const top = document.createElement('span');
-            top.className = 'char-top';
-            top.textContent = ch;
-
-            const bottom = document.createElement('span');
-            bottom.className = 'char-bottom';
-            bottom.textContent = ch;
-
-            mask.appendChild(top);
-            mask.appendChild(bottom);
-            wordSpan.appendChild(mask);
-
-            charMasks.push(mask);
-            charTops.push(top);
-            charBottoms.push(bottom);
-          }
-
-          textContainer.appendChild(wordSpan);
-
-          if (wIdx < words.length - 1) {
-            textContainer.appendChild(document.createTextNode(' '));
-          }
-        });
-
-        return {
-          token: tokenEl,
-          masks: charMasks,
-          tops: charTops,
-          bottoms: charBottoms
-        };
+      function applyClipPaths() {
+        invertGd.style.clipPath = 'inset(0% ' + clipState.gdR.toFixed(2) + '% 0% ' + clipState.gdL.toFixed(2) + '% round 6px)';
+        invertPh.style.clipPath = 'inset(0% ' + clipState.phR.toFixed(2) + '% 0% ' + clipState.phL.toFixed(2) + '% round 6px)';
       }
 
-      const phraseGdEl = document.getElementById('phrase-gd');
-      const phraseAndEl = document.getElementById('phrase-and');
-      const phrasePhEl = document.getElementById('phrase-ph');
-      const ruleGd = document.getElementById('rule-gd');
-      const rulePh = document.getElementById('rule-ph');
+      let headingMasterTl = null;
+      let resumeLoopTimer = null;
 
-      const splitGd = buildSplitPhrase(phraseGdEl);
-      const splitAnd = buildSplitPhrase(phraseAndEl);
-      const splitPh = buildSplitPhrase(phrasePhEl);
-
-      const allTops = splitGd.tops.concat(splitAnd.tops, splitPh.tops);
-      const allBottoms = splitGd.bottoms.concat(splitAnd.bottoms, splitPh.bottoms);
-
-      if (window.gsap) {
-        gsap.set(allTops, { yPercent: 0 });
-        gsap.set(allBottoms, { yPercent: 112 });
-        gsap.set([ruleGd, rulePh], { scaleX: 0, transformOrigin: 'left center' });
-      }
-
-      function createRollSubTimeline(splitObj, staggerVal, durationVal) {
-        const sub = gsap.timeline();
-        sub
-          .set(splitObj.tops, { yPercent: 0 })
-          .set(splitObj.bottoms, { yPercent: 112 })
-          .to(
-            splitObj.tops,
-            {
-              yPercent: -112,
-              duration: durationVal,
-              ease: 'expo.inOut',
-              stagger: staggerVal
-            },
-            0
-          )
-          .to(
-            splitObj.bottoms,
-            {
-              yPercent: 0,
-              duration: durationVal,
-              ease: 'expo.inOut',
-              stagger: staggerVal
-            },
-            0
-          )
-          .set(splitObj.tops, { yPercent: 0 })
-          .set(splitObj.bottoms, { yPercent: 112 });
-        return sub;
-      }
-
-      let masterHeadingTl = null;
-
-      function startHeadingLoop() {
+      function switchEmblem(mode) {
         if (!window.gsap || prefersReducedMotion) return;
-
-        masterHeadingTl = gsap.timeline({ repeat: -1 });
-
-        masterHeadingTl
-          .to(phraseGdEl, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 'gdFocus')
-          .to([phraseAndEl, phrasePhEl], { opacity: 0.36, duration: 0.45, ease: 'power2.out' }, 'gdFocus')
-          .set(ruleGd, { transformOrigin: 'left center', scaleX: 0 }, 'gdFocus')
-          .to(ruleGd, { scaleX: 1, duration: 0.72, ease: 'expo.inOut' }, 'gdFocus+=0.04')
-          .add(createRollSubTimeline(splitGd, 0.022, 0.72), 'gdFocus+=0.02')
-          .to({}, { duration: 1.15 })
-          .set(ruleGd, { transformOrigin: 'right center' })
-          .to(ruleGd, { scaleX: 0, duration: 0.52, ease: 'expo.inOut' })
-
-          .to(phraseGdEl, { opacity: 0.36, duration: 0.45, ease: 'power2.inOut' }, 'phFocus')
-          .to(phraseAndEl, { opacity: 0.36, duration: 0.45, ease: 'power2.inOut' }, 'phFocus')
-          .to(phrasePhEl, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 'phFocus')
-          .set(rulePh, { transformOrigin: 'left center', scaleX: 0 }, 'phFocus')
-          .to(rulePh, { scaleX: 1, duration: 0.72, ease: 'expo.inOut' }, 'phFocus+=0.04')
-          .add(createRollSubTimeline(splitPh, 0.022, 0.72), 'phFocus+=0.02')
-          .to({}, { duration: 1.15 })
-          .set(rulePh, { transformOrigin: 'right center' })
-          .to(rulePh, { scaleX: 0, duration: 0.52, ease: 'expo.inOut' })
-
-          .to([phraseGdEl, phrasePhEl], { opacity: 1, duration: 0.5, ease: 'power2.out' }, 'unify')
-          .to(phraseAndEl, { opacity: 0.85, duration: 0.5, ease: 'power2.out' }, 'unify')
-          .add(
-            createRollSubTimeline(
-              { tops: allTops, bottoms: allBottoms },
-              0.014,
-              0.68
-            ),
-            'unify+=0.04'
-          )
-          .to({}, { duration: 2.2 });
+        if (mode === 'gd') {
+          gsap.to(emblemVec, { opacity: 1, scale: 1, rotate: 0, transformOrigin: '50% 50%', duration: 0.55, ease: 'expo.out', overwrite: 'auto' });
+          gsap.to(emblemCam, { opacity: 0, scale: 0.65, rotate: -45, transformOrigin: '50% 50%', duration: 0.4, ease: 'power2.in', overwrite: 'auto' });
+        } else {
+          gsap.to(emblemVec, { opacity: 0, scale: 0.65, rotate: 45, transformOrigin: '50% 50%', duration: 0.4, ease: 'power2.in', overwrite: 'auto' });
+          gsap.to(emblemCam, { opacity: 1, scale: 1, rotate: 0, transformOrigin: '50% 50%', duration: 0.55, ease: 'expo.out', overwrite: 'auto' });
+        }
       }
 
-      function attachInteractiveRoll(splitObj, ruleEl) {
-        let isRolling = false;
-        splitObj.token.addEventListener('pointerenter', function () {
-          if (!window.gsap || prefersReducedMotion || isRolling) return;
-          isRolling = true;
-          gsap.killTweensOf([splitObj.tops, splitObj.bottoms, ruleEl]);
-          const tl = gsap.timeline({
-            onComplete: function () {
-              isRolling = false;
-            }
+      function buildHeadingChoreography() {
+        if (!window.gsap || prefersReducedMotion) return;
+        if (headingMasterTl) {
+          headingMasterTl.kill();
+        }
+
+        clipState.gdL = 0;
+        clipState.gdR = 100;
+        clipState.phL = 0;
+        clipState.phR = 100;
+        applyClipPaths();
+
+        gsap.set([lineGd, linePh], { scaleX: 0, transformOrigin: '0% 50%' });
+
+        headingMasterTl = gsap.timeline({
+          repeat: -1,
+          onUpdate: applyClipPaths
+        });
+
+        headingMasterTl
+          .add(function () { switchEmblem('gd'); })
+          .to(clipState, { gdL: 0, gdR: 0, duration: 0.85, ease: 'expo.inOut' }, 'gdIn')
+          .to(lineGd, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.85, ease: 'expo.inOut' }, 'gdIn')
+          .to({}, { duration: 1.25 })
+
+          .add(function () { switchEmblem('ph'); }, 'transitionToPh')
+          .to(clipState, { gdL: 100, gdR: 0, duration: 0.78, ease: 'expo.inOut' }, 'transitionToPh')
+          .to(lineGd, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.72, ease: 'expo.inOut' }, 'transitionToPh')
+          .fromTo(
+            clipState,
+            { phL: 0, phR: 100 },
+            { phL: 0, phR: 0, duration: 0.85, ease: 'expo.inOut', immediateRender: false },
+            'transitionToPh+=0.1'
+          )
+          .to(linePh, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.85, ease: 'expo.inOut' }, 'transitionToPh+=0.1')
+          .to({}, { duration: 1.25 })
+
+          .to(clipState, { phL: 100, phR: 0, duration: 0.78, ease: 'expo.inOut' }, 'phOut')
+          .to(linePh, { scaleX: 0, transformOrigin: '100% 50%', duration: 0.72, ease: 'expo.inOut' }, 'phOut')
+
+          .add(function () { switchEmblem('gd'); }, 'dualUnderline')
+          .set(clipState, { gdL: 0, gdR: 100, phL: 0, phR: 100 }, 'dualUnderline')
+          .to([lineGd, linePh], {
+            scaleX: 1,
+            transformOrigin: '0% 50%',
+            duration: 0.7,
+            stagger: 0.1,
+            ease: 'expo.out'
+          }, 'dualUnderline')
+          .to({}, { duration: 1.0 })
+          .to([lineGd, linePh], {
+            scaleX: 0,
+            transformOrigin: '100% 50%',
+            duration: 0.6,
+            stagger: 0.08,
+            ease: 'power3.inOut'
           });
-          tl.set(ruleEl, { transformOrigin: 'left center', scaleX: 0 }, 0)
-            .to(ruleEl, { scaleX: 1, duration: 0.55, ease: 'expo.out' }, 0)
-            .add(createRollSubTimeline(splitObj, 0.018, 0.6), 0)
-            .set(ruleEl, { transformOrigin: 'right center' })
-            .to(ruleEl, { scaleX: 0, duration: 0.45, ease: 'expo.inOut' });
+      }
+
+      function bindRoleScrub(tokenEl, roleKey) {
+        tokenEl.addEventListener('pointermove', function (e) {
+          if (!window.gsap || prefersReducedMotion) return;
+          if (headingMasterTl) headingMasterTl.pause();
+          if (resumeLoopTimer) clearTimeout(resumeLoopTimer);
+
+          const rect = tokenEl.getBoundingClientRect();
+          const relX = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+          const centerPct = relX * 100;
+          const halfWindow = 28;
+          const leftVal = Math.max(0, centerPct - halfWindow);
+          const rightVal = Math.max(0, 100 - (centerPct + halfWindow));
+
+          switchEmblem(roleKey);
+
+          if (roleKey === 'gd') {
+            gsap.to(clipState, {
+              gdL: leftVal,
+              gdR: rightVal,
+              phL: 0,
+              phR: 100,
+              duration: 0.28,
+              ease: 'power3.out',
+              overwrite: 'auto',
+              onUpdate: applyClipPaths
+            });
+            gsap.to(lineGd, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.3, overwrite: 'auto' });
+            gsap.to(linePh, { scaleX: 0, duration: 0.25, overwrite: 'auto' });
+          } else {
+            gsap.to(clipState, {
+              phL: leftVal,
+              phR: rightVal,
+              gdL: 0,
+              gdR: 100,
+              duration: 0.28,
+              ease: 'power3.out',
+              overwrite: 'auto',
+              onUpdate: applyClipPaths
+            });
+            gsap.to(linePh, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.3, overwrite: 'auto' });
+            gsap.to(lineGd, { scaleX: 0, duration: 0.25, overwrite: 'auto' });
+          }
+        });
+
+        tokenEl.addEventListener('pointerleave', function () {
+          if (!window.gsap || prefersReducedMotion) return;
+          if (resumeLoopTimer) clearTimeout(resumeLoopTimer);
+          resumeLoopTimer = setTimeout(function () {
+            buildHeadingChoreography();
+          }, 600);
+        });
+
+        tokenEl.addEventListener('click', function () {
+          if (!window.gsap || prefersReducedMotion) return;
+          if (headingMasterTl) headingMasterTl.pause();
+          if (resumeLoopTimer) clearTimeout(resumeLoopTimer);
+
+          switchEmblem(roleKey);
+
+          if (roleKey === 'gd') {
+            gsap.to(clipState, {
+              gdL: 0,
+              gdR: 0,
+              phL: 0,
+              phR: 100,
+              duration: 0.5,
+              ease: 'expo.out',
+              overwrite: 'auto',
+              onUpdate: applyClipPaths
+            });
+            gsap.to(lineGd, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.45, overwrite: 'auto' });
+            gsap.to(linePh, { scaleX: 0, duration: 0.3, overwrite: 'auto' });
+          } else {
+            gsap.to(clipState, {
+              phL: 0,
+              phR: 0,
+              gdL: 0,
+              gdR: 100,
+              duration: 0.5,
+              ease: 'expo.out',
+              overwrite: 'auto',
+              onUpdate: applyClipPaths
+            });
+            gsap.to(linePh, { scaleX: 1, transformOrigin: '0% 50%', duration: 0.45, overwrite: 'auto' });
+            gsap.to(lineGd, { scaleX: 0, duration: 0.3, overwrite: 'auto' });
+          }
+
+          resumeLoopTimer = setTimeout(function () {
+            buildHeadingChoreography();
+          }, 2200);
         });
       }
 
-      attachInteractiveRoll(splitGd, ruleGd);
-      attachInteractiveRoll(splitPh, rulePh);
+      bindRoleScrub(tokenGd, 'gd');
+      bindRoleScrub(tokenPh, 'ph');
 
       function updateOdometer(container, nextText, prevText) {
         if (!window.gsap || prefersReducedMotion) {
@@ -1103,7 +1216,7 @@
       if (window.gsap && !prefersReducedMotion) {
         const introTl = gsap.timeline({
           defaults: { ease: 'power3.out' },
-          onComplete: startHeadingLoop
+          onComplete: buildHeadingChoreography
         });
 
         introTl
@@ -1120,22 +1233,22 @@
             0.05
           )
           .fromTo(
-            allTops,
-            { yPercent: 112 },
-            { yPercent: 0, duration: 0.78, stagger: 0.016, ease: 'expo.out' },
-            0.1
+            [tokenGd, phraseAnd, tokenPh, '.kinetic-emblem'],
+            { y: 14, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.72, stagger: 0.06, ease: 'expo.out' },
+            0.12
           )
           .fromTo(
             '.bio-paragraph',
             { yPercent: 100, opacity: 0 },
             { yPercent: 0, opacity: 1, duration: 0.72, stagger: 0.08 },
-            0.26
+            0.24
           )
           .fromTo(
             '.link-line',
             { scaleX: 0 },
             { scaleX: 1, duration: 0.75, stagger: 0.05, ease: 'expo.out' },
-            0.3
+            0.28
           )
           .fromTo(
             '.link-row',
@@ -1147,25 +1260,25 @@
               stagger: 0.05,
               clearProps: 'opacity,transform'
             },
-            0.34
+            0.32
           )
           .fromTo(
             '#ig-card',
             { y: 16, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.8 },
-            0.28
+            0.26
           )
           .fromTo(
             '#footer-line',
             { scaleX: 0 },
             { scaleX: 1, duration: 0.8, ease: 'expo.out' },
-            0.44
+            0.42
           )
           .fromTo(
             ['.footer-brand', '.footer-logo-link', '#session-timer'],
             { y: 10, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.6, stagger: 0.05 },
-            0.48
+            0.46
           );
       }
 
