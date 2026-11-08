@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
   <style>
     :root,
     [data-theme="dark"] {
@@ -25,6 +26,10 @@
       --surface: #161614;
       --surface-hover: #20201D;
       --accent: #D6D3C9;
+      --pill-bg: #F5F4F0;
+      --pill-text: #0D0D0C;
+      --pill-bar: #0D0D0C;
+      --pill-shadow: 0 10px 30px -6px rgba(245, 244, 240, 0.22);
     }
 
     [data-theme="light"] {
@@ -37,6 +42,10 @@
       --surface: #F0EFE9;
       --surface-hover: #E6E3DA;
       --accent: #5C5952;
+      --pill-bg: #141413;
+      --pill-text: #FAF9F5;
+      --pill-bar: #FAF9F5;
+      --pill-shadow: 0 10px 28px -6px rgba(20, 20, 19, 0.2);
     }
 
     * {
@@ -208,7 +217,7 @@
       font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: clamp(1.95rem, 3.1vw, 2.55rem);
       font-weight: 500;
-      line-height: 1.18;
+      line-height: 1.24;
       letter-spacing: -0.03em;
       color: var(--text);
       margin-bottom: 22px;
@@ -217,57 +226,41 @@
       -webkit-user-select: none;
     }
 
-    .word-wrap {
-      display: inline-block;
-      white-space: nowrap;
-      vertical-align: bottom;
-    }
-
-    .char-mask {
-      display: inline-block;
+    .role-pill-wrap {
       position: relative;
-      overflow: hidden;
-      vertical-align: bottom;
-      line-height: 1.14;
-      padding-bottom: 0.03em;
-      margin-bottom: -0.03em;
+      display: inline-block;
+      vertical-align: baseline;
+      font-weight: 500;
     }
 
-    .char-track {
-      display: block;
-      position: relative;
-      will-change: transform, clip-path;
-      transform: translate3d(0, 0, 0);
-    }
-
-    .char-orig {
-      display: block;
+    .role-base {
+      display: inline-block;
       color: var(--text);
       font-weight: 500;
       transition: color 0.3s ease;
     }
 
-    .char-accent,
-    .char-clone {
-      display: block;
+    .role-invert {
       position: absolute;
-      left: 0;
-      width: 100%;
-      font-weight: 500;
-      pointer-events: none;
-    }
-
-    .char-accent {
-      top: 100%;
-      color: var(--bg);
+      inset: 0;
+      display: inline-block;
       background-color: var(--text);
-      border-radius: 3px;
-      transition: color 0.3s ease, background-color 0.3s ease;
+      color: var(--bg);
+      font-weight: 500;
+      padding: 0.04em 0.24em;
+      margin: -0.04em -0.24em;
+      border-radius: 6px;
+      clip-path: inset(0% 100% 0% 0% round 6px);
+      pointer-events: none;
+      white-space: nowrap;
+      will-change: clip-path;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .char-clone {
-      top: 200%;
+    .role-conj {
+      display: inline-block;
       color: var(--text);
+      font-weight: 500;
       transition: color 0.3s ease;
     }
 
@@ -613,8 +606,8 @@
 
       .hero-heading {
         font-size: clamp(2rem, 8.4vw, 2.45rem);
-        line-height: 1.18;
-        margin-bottom: 18px;
+        line-height: 1.22;
+        margin-bottom: 20px;
       }
 
       .bio-copy {
@@ -696,9 +689,15 @@
       <div class="left-column">
         <section class="intro">
           <h1 class="hero-heading" id="hero-heading" aria-label="Graphic Designer and Photographer.">
-            <span class="role-phrase" id="phrase-gd">Graphic Designer</span>
+            <span class="role-pill-wrap" id="phrase-gd">
+              <span class="role-base">Graphic Designer</span>
+              <span class="role-invert" id="invert-gd" aria-hidden="true">Graphic Designer</span>
+            </span>
             <span class="role-conj" id="phrase-and">and</span>
-            <span class="role-phrase" id="phrase-ph">Photographer.</span>
+            <span class="role-pill-wrap" id="phrase-ph">
+              <span class="role-base">Photographer.</span>
+              <span class="role-invert" id="invert-ph" aria-hidden="true">Photographer.</span>
+            </span>
           </h1>
 
           <div class="bio-copy">
@@ -853,71 +852,9 @@
       setTimeout(updateScrollProgress, 300);
       setTimeout(updateScrollProgress, 1500);
 
-      function buildDualTrackChars(container) {
-        const text = container.textContent.trim();
-        container.textContent = '';
-        const words = text.split(' ');
-        const tracks = [];
-        const masks = [];
-
-        words.forEach(function (word, wIdx) {
-          const wordSpan = document.createElement('span');
-          wordSpan.className = 'word-wrap';
-
-          for (let i = 0; i < word.length; i++) {
-            const ch = word[i];
-            const mask = document.createElement('span');
-            mask.className = 'char-mask';
-            mask.setAttribute('aria-hidden', 'true');
-
-            const track = document.createElement('span');
-            track.className = 'char-track';
-
-            const orig = document.createElement('span');
-            orig.className = 'char-orig';
-            orig.textContent = ch;
-
-            const accent = document.createElement('span');
-            accent.className = 'char-accent';
-            accent.textContent = ch;
-
-            const clone = document.createElement('span');
-            clone.className = 'char-clone';
-            clone.textContent = ch;
-
-            track.appendChild(orig);
-            track.appendChild(accent);
-            track.appendChild(clone);
-            mask.appendChild(track);
-            wordSpan.appendChild(mask);
-
-            tracks.push(track);
-            masks.push(mask);
-          }
-
-          container.appendChild(wordSpan);
-          if (wIdx < words.length - 1) {
-            container.appendChild(document.createTextNode(' '));
-          }
-        });
-
-        return { tracks: tracks, masks: masks };
-      }
-
       const heroHeading = document.getElementById('hero-heading');
-      const phraseGd = document.getElementById('phrase-gd');
-      const phraseAnd = document.getElementById('phrase-and');
-      const phrasePh = document.getElementById('phrase-ph');
-
-      const gdBuilt = buildDualTrackChars(phraseGd);
-      const andBuilt = buildDualTrackChars(phraseAnd);
-      const phBuilt = buildDualTrackChars(phrasePh);
-
-      const gdTracks = gdBuilt.tracks;
-      const andTracks = andBuilt.tracks;
-      const phTracks = phBuilt.tracks;
-      const allTracks = gdTracks.concat(andTracks, phTracks);
-      const allMasks = gdBuilt.masks.concat(andBuilt.masks, phBuilt.masks);
+      const invertGd = document.getElementById('invert-gd');
+      const invertPh = document.getElementById('invert-ph');
 
       const clockValEl = document.getElementById('est-time-val');
       const timeFormatter = new Intl.DateTimeFormat('en-US', {
@@ -958,15 +895,12 @@
       updateSessionTimer();
       setInterval(updateSessionTimer, 1000);
 
-      let isPointerOverHeading = false;
-      let masterLoop = null;
-
       if (window.gsap) {
         const buildIn = gsap.timeline({
           defaults: { ease: 'expo.out' },
           onComplete: function () {
-            gsap.set('.bio-para, .link-row, #header-brand, #header-right, #ig-card, #footer-copy, #footer-logo-wrap, #session-timer', {
-              clearProps: 'transform,opacity'
+            gsap.set('.bio-para, .link-row, #header-brand, #header-right, #ig-card, #footer-copy, #footer-logo-wrap, #session-timer, #hero-heading', {
+              clearProps: 'transform,opacity,clipPath'
             });
             startHeroChoreography();
           }
@@ -974,7 +908,8 @@
 
         gsap.set(['.header-line', '.row-border-top', '.row-border-bottom', '.footer-line'], { scaleX: 0 });
         gsap.set(['#header-brand', '#header-right'], { opacity: 0, y: 10 });
-        gsap.set(allTracks, { yPercent: 110, clipPath: 'inset(0% 0% 0% 0%)' });
+        gsap.set(heroHeading, { clipPath: 'inset(0% 100% 0% 0%)' });
+        gsap.set([invertGd, invertPh], { clipPath: 'inset(0% 100% 0% 0% round 6px)' });
         gsap.set('.bio-para', { opacity: 0, y: 14 });
         gsap.set('.link-row', { opacity: 0, y: 12 });
         gsap.set('#ig-card', { opacity: 0, y: 18 });
@@ -983,10 +918,9 @@
         buildIn
           .to('.header-line', { scaleX: 1, duration: 0.9 }, 0)
           .to(['#header-brand', '#header-right'], { opacity: 1, y: 0, duration: 0.7, stagger: 0.06 }, 0.08)
-          .to(allTracks, {
-            yPercent: 0,
-            duration: 0.88,
-            stagger: 0.022,
+          .to(heroHeading, {
+            clipPath: 'inset(0% 0% 0% 0%)',
+            duration: 0.95,
             ease: 'expo.out'
           }, 0.14)
           .to('.bio-para', { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 }, 0.42)
@@ -997,105 +931,32 @@
           .to(['#footer-copy', '#footer-logo-wrap', '#session-timer'], { opacity: 1, y: 0, duration: 0.65, stagger: 0.06 }, 0.68);
 
         function startHeroChoreography() {
-          masterLoop = gsap.timeline({ repeat: -1, repeatDelay: 1.6 });
+          const pillLoop = gsap.timeline({ repeat: -1, repeatDelay: 0.9 });
 
-          masterLoop
-            .to(gdTracks, {
-              yPercent: -100,
-              duration: 0.52,
-              stagger: 0.024,
+          pillLoop
+            .set(invertGd, { clipPath: 'inset(0% 100% 0% 0% round 6px)' })
+            .set(invertPh, { clipPath: 'inset(0% 100% 0% 0% round 6px)' })
+            .to(invertGd, {
+              clipPath: 'inset(0% 0% 0% 0% round 6px)',
+              duration: 0.75,
               ease: 'expo.inOut'
             })
-            .to(gdTracks, {
-              yPercent: -200,
-              duration: 0.52,
-              stagger: 0.024,
+            .to(invertGd, {
+              clipPath: 'inset(0% 0% 0% 100% round 6px)',
+              duration: 0.7,
               ease: 'expo.inOut'
-            }, '+=0.18')
-            .set(gdTracks, { yPercent: 0 })
-            .to(phTracks, {
-              yPercent: -100,
-              duration: 0.52,
-              stagger: 0.024,
+            }, '+=0.85')
+            .to(invertPh, {
+              clipPath: 'inset(0% 0% 0% 0% round 6px)',
+              duration: 0.75,
               ease: 'expo.inOut'
-            }, '-=0.25')
-            .to(phTracks, {
-              yPercent: -200,
-              duration: 0.52,
-              stagger: 0.024,
+            }, '-=0.45')
+            .to(invertPh, {
+              clipPath: 'inset(0% 0% 0% 100% round 6px)',
+              duration: 0.7,
               ease: 'expo.inOut'
-            }, '+=0.18')
-            .set(phTracks, { yPercent: 0 })
-            .to(allTracks, {
-              clipPath: 'inset(0% 0% 100% 0%)',
-              yPercent: -35,
-              duration: 0.36,
-              stagger: { each: 0.018, from: 'center' },
-              ease: 'power3.in'
-            }, '+=1.4')
-            .set(allTracks, {
-              clipPath: 'inset(100% 0% 0% 0%)',
-              yPercent: 45
-            })
-            .to(allTracks, {
-              clipPath: 'inset(0% 0% 0% 0%)',
-              yPercent: 0,
-              duration: 0.62,
-              stagger: { each: 0.02, from: 'center' },
-              ease: 'power4.out'
-            })
-            .to(allTracks, {
-              yPercent: -18,
-              duration: 0.24,
-              stagger: 0.018,
-              ease: 'power2.out'
-            }, '+=1.4')
-            .to(allTracks, {
-              yPercent: 0,
-              duration: 0.72,
-              stagger: 0.018,
-              ease: 'elastic.out(1, 0.5)'
-            }, '<0.12');
+            }, '+=0.85');
         }
-
-        const quickYList = allTracks.map(function (track) {
-          return gsap.quickTo(track, 'yPercent', { duration: 0.36, ease: 'power3.out' });
-        });
-
-        heroHeading.addEventListener('pointerenter', function () {
-          isPointerOverHeading = true;
-          if (masterLoop) masterLoop.pause();
-          gsap.set(allTracks, { clipPath: 'inset(0% 0% 0% 0%)' });
-        });
-
-        heroHeading.addEventListener('pointermove', function (e) {
-          if (!isPointerOverHeading) return;
-          for (let i = 0; i < allMasks.length; i++) {
-            const rect = allMasks[i].getBoundingClientRect();
-            const cx = rect.left + rect.width * 0.5;
-            const cy = rect.top + rect.height * 0.5;
-            const dist = Math.hypot(e.clientX - cx, e.clientY - cy);
-            const radius = 84;
-            if (dist < radius) {
-              const factor = Math.cos((dist / radius) * (Math.PI * 0.5));
-              quickYList[i](-16 * factor);
-            } else {
-              quickYList[i](0);
-            }
-          }
-        });
-
-        heroHeading.addEventListener('pointerleave', function () {
-          isPointerOverHeading = false;
-          for (let i = 0; i < quickYList.length; i++) {
-            quickYList[i](0);
-          }
-          gsap.delayedCall(0.38, function () {
-            if (!isPointerOverHeading && masterLoop) {
-              masterLoop.restart(true);
-            }
-          });
-        });
       }
 
       const copyBtn = document.getElementById('email-copy-btn');
