@@ -1,155 +1,349 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ayaan Ahmed</title>
-<link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Outfit:wght@800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../css/style.css?v=38">
-<meta name="robots" content="noimageindex">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#F7F6F2">
+  <title>Ayaan Ahmed</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon-light.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Pixel:ELSH@0..100&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/SplitText.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      background: #F7F6F2;
+    }
+
+    body {
+      background: #F7F6F2;
+      color: #171717;
+      overflow-x: hidden;
+    }
+
+    .scroll-stage {
+      position: relative;
+      height: 210svh;
+    }
+
+    .hero {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      width: 100%;
+      display: grid;
+      place-items: center;
+    }
+
+    .composition {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      cursor: crosshair;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .name {
+      display: inline-block;
+      white-space: nowrap;
+      font-family: 'Geist', sans-serif;
+      font-size: clamp(3rem, 8.5vw, 8rem);
+      font-weight: 500;
+      letter-spacing: -0.055em;
+      line-height: 1.2;
+      font-kerning: normal;
+      font-variant-ligatures: none;
+      overflow: visible;
+    }
+
+    .char {
+      display: inline-block;
+      vertical-align: baseline;
+      will-change: transform, opacity;
+    }
+
+    .subtitle {
+      margin-top: 26px;
+      color: #77746F;
+      font-family: 'Geist Pixel', sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      opacity: 0;
+    }
+
+    @media (max-width: 600px) {
+      .name {
+        font-size: clamp(2.7rem, 10.5vw, 4.5rem);
+      }
+
+      .subtitle {
+        margin-top: 22px;
+        font-size: 10px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-stage {
+        height: 100svh;
+      }
+
+      .char {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+
+      .subtitle {
+        opacity: 1;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <section class="scroll-stage">
+    <main class="hero">
+      <a
+        class="composition"
+        href="https://www.instagram.com/bluetigerincstudios/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit Ayaan Ahmed on Instagram"
+      >
+        <h1 class="name" aria-label="Ayaan Ahmed">Ayaan Ahmed</h1>
+        <p class="subtitle">THIS PAGE IS BEING DESIGNED</p>
+      </a>
+    </main>
+  </section>
 
-<header class="header">
-<a href="../index.html" class="logo">Ayaan Ahmed.</a>
+  <script>
+    gsap.registerPlugin(ScrollTrigger, SplitText);
 
-<a href="../index.html" class="logo-mobile">
-    <img src="../assets/logo.svg" alt="Ayaan Ahmed Studios">
-</a>
+    const name = document.querySelector('.name');
+    const subtitle = document.querySelector('.subtitle');
+    const stage = document.querySelector('.scroll-stage');
 
-<nav class="desktop-nav">
-<a href="../portfolio/graphic-design.html" class="active-page">Graphic Design</a>
-<a href="../portfolio/photography.html">Photography</a>
-<a href="../portfolio/videography.html">Videography</a>
-</nav>
+    const reducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
 
-<div class="menu-icon" onclick="toggleMenu()">
-    <div class="burger-line"></div>
-    <div class="burger-line"></div>
-</div>
-</header>
+    const canHover = window.matchMedia(
+      '(hover: hover) and (pointer: fine)'
+    ).matches;
 
-<div class="menu-overlay" id="mobile-menu">
-<a href="../portfolio/graphic-design.html" class="active-page">Graphic Design</a>
-<a href="../portfolio/photography.html">Photography</a>
-<a href="../portfolio/videography.html">Videography</a>
-<div class="menu-divider"></div>
-<a href="../about.html" class="menu-about-link">About Me</a>
-</div>
+    let chars = [];
+    let motion = [];
+    let renderers = [];
+    let hoverSetters = [];
 
-<div class="liquid-dock-container animate-on-load">
-    <a href="the-jeff-gang.html" class="dock-link prev">
-        <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-        <span>Prev</span>
-    </a>
-    
-    <div class="dock-divider"></div>
-    
-    <a href="../portfolio/graphic-design.html" class="dock-link index">
-        <span>Index</span>
-    </a>
-    
-    <div class="dock-divider"></div>
+    let ambientAnimation;
+    let scrollAnimation;
 
-    <a href="blue-tiger-inc-studios.html" class="dock-link next">
-        <span>Next</span>
-        <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-    </a>
-</div>
+    const ambient = { phase: 0 };
+    const scroll = { progress: 0 };
 
-<main class="project-container">
-    
-    <section class="header-jewel animate-on-load">
-        <div class="jewel-title">
-            <span class="project-category">Brand Identity • 2019 - Present</span>
-            <h1 class="typewriter terminal-cursor">Ayaan Ahmed</h1>
-        </div>
-        <div class="jewel-line"></div>
-    </section>
+    function render() {
+      motion.forEach((item, index) => {
+        const total =
+          item.intro +
+          item.ambient +
+          item.scroll +
+          item.hover;
 
-    <section class="aligned-split animate-on-load">
-        <div class="left-info-container">
-            <div class="meta-row">
-                <div class="meta-block">
-                    <h4>Client</h4>
-                    <p>Personal Branding</p>
-                </div>
-                <div class="meta-block">
-                    <h4>Medium</h4>
-                    <p>Brand Identity</p>
-                </div>
-                <div class="meta-block">
-                    <h4>Tools</h4>
-                    <p>Illustrator<br>Photoshop</p>
-                </div>
-            </div>
+        renderers[index](total);
+      });
+    }
 
-            <div class="intro-text">
-                <p>I started developing this brand in the first few days I began learning how to use Illustrator, to reflect my personal identity and the modern, minimal style I often use in my design work. The brand has since been used on projects, videos, assignments and social media.</p>
-                <p>The main logo incorporates multiple concepts and elements, like utilizing the modern Lemon/Milk font, combining the left strokes of the As in my first and last name, and a hidden emoticon within the E and D in my last name.</p>
-            </div>
-        </div>
+    function renderAmbient() {
+      motion.forEach((item, index) => {
+        item.ambient = Math.sin(
+          ambient.phase - index * 0.65
+        ) * 2;
+      });
 
-        <div class="right-image-container">
-            <img src="https://res.cloudinary.com/ayaanahmed/image/upload/f_auto,q_auto/v1768716676/Ayaan_Ahmed_Graphic_Design_Portfolio_2_qvia7k.webp" alt="Ayaan Ahmed Hero" class="protected-image">
-        </div>
-    </section>
+      render();
+    }
 
-    <section class="project-gallery">
-        <div class="gallery-item full-width animate-on-load">
-            <img src="https://picsum.photos/1600/1000" alt="Brand Overview" class="protected-image">
-            <span class="caption">Brand Identity System</span>
-        </div>
+    function renderScroll() {
+      const progress = scroll.progress;
+      const amplitude = Math.sin(progress * Math.PI) * 6;
+      const phase = progress * Math.PI * 3;
 
-        <div class="gallery-grid">
-            <div class="gallery-item animate-on-load">
-                <img src="https://picsum.photos/800/1000" alt="Stationery Design" class="protected-image">
-            </div>
-            <div class="gallery-item animate-on-load">
-                <img src="https://picsum.photos/801/1000" alt="Digital Assets" class="protected-image">
-            </div>
-        </div>
+      motion.forEach((item, index) => {
+        const position = index / Math.max(chars.length - 1, 1);
 
-        <div class="gallery-item full-width animate-on-load">
-            <img src="https://picsum.photos/1600/800" alt="Logo Applications" class="protected-image">
-            <span class="caption">Logo Applications</span>
-        </div>
-    </section>
+        item.scroll = Math.sin(
+          position * Math.PI * 4 - phase
+        ) * amplitude;
+      });
 
-</main>
+      render();
+    }
 
-<footer class="footer">
-<div class="copyright">© <span id="copyright-year">2026</span> <strong>Ayaan Ahmed Studios</strong></div>
+    function renderHover(pointerX) {
+      chars.forEach((char, index) => {
+        const rect = char.getBoundingClientRect();
+        const center = rect.left + rect.width / 2;
+        const distance = center - pointerX;
 
-<div class="footer-right">
-<button class="contact-btn">
-    <span class="contact-label">Contact</span>
-    <span class="contact-success" style="display:none;">
-        <svg width="12" height="10" viewBox="0 0 13 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 5L4.5 8.5L11.5 1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        Email Copied
-    </span>
-</button>
+        const influence = Math.exp(
+          -Math.abs(distance) / 65
+        );
 
-<div class="social-icons">
-<a href="https://instagram.com/bluetigerincstudios" target="_blank" class="icon-link">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-    </svg>
-</a>
-<a href="https://www.linkedin.com/in/ayaanahmedofficial/" target="_blank" class="icon-link">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
-        <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"/>
-    </svg>
-</a>
-</div>
-</div>
-</footer>
+        const wave = Math.cos(distance / 19);
 
-<script src="../js/script.js"></script>
+        hoverSetters[index](
+          -wave * influence * 12
+        );
+      });
+    }
+
+    function initialiseHover() {
+      hoverSetters = motion.map(item =>
+        gsap.quickTo(item, 'hover', {
+          duration: 0.35,
+          ease: 'power3.out',
+          onUpdate: render
+        })
+      );
+
+      name.addEventListener('pointerenter', event => {
+        renderHover(event.clientX);
+      });
+
+      name.addEventListener('pointermove', event => {
+        renderHover(event.clientX);
+      });
+
+      name.addEventListener('pointerleave', () => {
+        hoverSetters.forEach(setter => setter(0));
+      });
+    }
+
+    function initialiseAmbient() {
+      ambientAnimation = gsap.to(ambient, {
+        phase: Math.PI * 2,
+        duration: 9,
+        ease: 'none',
+        repeat: -1,
+        onUpdate: renderAmbient
+      });
+    }
+
+    function initialiseScroll() {
+      scrollAnimation = gsap.to(scroll, {
+        progress: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: stage,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.8
+        },
+        onUpdate: renderScroll
+      });
+    }
+
+    async function initialise() {
+      await document.fonts.ready;
+
+      if (reducedMotion) {
+        gsap.set(subtitle, { opacity: 1 });
+        return;
+      }
+
+      const split = SplitText.create(name, {
+        type: 'chars',
+        charsClass: 'char',
+        tag: 'span'
+      });
+
+      chars = split.chars.filter(char =>
+        char.textContent.trim() !== ''
+      );
+
+      motion = chars.map(() => ({
+        intro: 0,
+        ambient: 0,
+        scroll: 0,
+        hover: 0
+      }));
+
+      renderers = chars.map(char =>
+        gsap.quickSetter(char, 'y', 'px')
+      );
+
+      gsap.set(chars, {
+        autoAlpha: 0
+      });
+
+      gsap.set(subtitle, {
+        autoAlpha: 0,
+        y: 7
+      });
+
+      const entrance = gsap.timeline({
+        onComplete: () => {
+          initialiseAmbient();
+        }
+      });
+
+      entrance.to(chars, {
+        autoAlpha: 1,
+        duration: 0.5,
+        stagger: {
+          each: 0.045,
+          from: 'center'
+        },
+        ease: 'power2.out'
+      }, 0);
+
+      entrance.fromTo(
+        motion,
+        {
+          intro: index => index % 2 === 0 ? 18 : -18
+        },
+        {
+          intro: 0,
+          duration: 1.15,
+          stagger: {
+            each: 0.045,
+            from: 'center'
+          },
+          ease: 'power4.out',
+          onUpdate: render
+        },
+        0
+      );
+
+      entrance.to(subtitle, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out'
+      }, 0.7);
+
+      initialiseScroll();
+
+      if (canHover) {
+        initialiseHover();
+      }
+    }
+
+    initialise();
+  </script>
 </body>
 </html>
