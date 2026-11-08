@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,16 +14,25 @@
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>
-    :root {
+    :root,
+    html[data-theme="dark"] {
+      --bg: #0D0D0C;
+      --text: #F4F3EF;
+      --body: #A8A6A0;
+      --muted: #706F6A;
+      --border: #222220;
+      --surface: #161614;
+      --surface-hover: #1F1F1C;
+    }
+
+    html[data-theme="light"] {
       --bg: #FAF9F5;
       --text: #141413;
       --body: #454440;
-      --secondary: #575653;
       --muted: #8C8B85;
       --border: #E6E4DD;
       --surface: #F1EFE9;
       --surface-hover: #E7E4DC;
-      --highlight: #EDEAE0;
     }
 
     * {
@@ -52,11 +61,31 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--text);
+      transform-origin: 0 50%;
+      transform: scaleX(0);
+      opacity: 0;
+      z-index: 100;
+      pointer-events: none;
+      transition: opacity 0.2s ease, background-color 0.25s ease;
+    }
+
+    .scroll-progress.is-scrollable {
+      opacity: 1;
     }
 
     .page-shell {
       width: 100%;
-      max-width: 1180px;
+      max-width: 1140px;
       margin: 0 auto;
       padding: 44px 48px 34px;
       flex: 1;
@@ -73,6 +102,7 @@
       background-color: var(--border);
       transform-origin: left center;
       pointer-events: none;
+      transition: background-color 0.25s ease;
     }
 
     .hairline-top {
@@ -100,6 +130,13 @@
       letter-spacing: -0.018em;
       color: var(--text);
       display: inline-block;
+      transition: color 0.25s ease;
+    }
+
+    .header-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
     }
 
     .header-clock {
@@ -112,6 +149,37 @@
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
+      transition: color 0.25s ease;
+    }
+
+    .theme-toggle {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.05rem;
+      line-height: 1;
+      transition: color 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      color: var(--text);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 1.5px solid var(--text);
+      outline-offset: 4px;
+      border-radius: 3px;
+    }
+
+    .theme-toggle i {
+      display: inline-block;
+      will-change: transform;
     }
 
     .odometer {
@@ -150,8 +218,8 @@
 
     @media (min-width: 960px) {
       .main-grid {
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1.04fr);
-        gap: 72px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+        gap: 68px;
         align-items: center;
       }
     }
@@ -164,185 +232,81 @@
 
     .hero-stage {
       position: relative;
-      padding-top: 18px;
-      margin-top: -10px;
       margin-bottom: 22px;
     }
 
-    .hero-backdrop-layer {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .hero-highlight {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      background-color: var(--highlight);
-      border-radius: 2px;
-      opacity: 0;
-      will-change: transform, width, height, opacity;
-    }
-
     .intro h1 {
-      position: relative;
-      z-index: 1;
       font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.9rem, 3.1vw, 2.5rem);
+      font-size: clamp(1.88rem, 3.05vw, 2.48rem);
       font-weight: 500;
-      line-height: 1.22;
-      letter-spacing: -0.028em;
+      line-height: 1.28;
+      letter-spacing: -0.026em;
       color: var(--text);
       display: flex;
       flex-wrap: wrap;
       align-items: baseline;
-      column-gap: 0.26em;
-      row-gap: 0.14em;
+      column-gap: 0.28em;
+      row-gap: 0.16em;
     }
 
-    .h1-clip {
+    .h1-token {
+      position: relative;
       display: inline-flex;
-      overflow: hidden;
-      padding: 2px 0 4px;
-      margin: -2px 0 -4px;
+      flex-wrap: wrap;
+      align-items: baseline;
+      column-gap: 0.26em;
+      padding-bottom: 4px;
+      cursor: default;
+      will-change: opacity;
     }
 
-    .h1-phrase {
-      display: inline-block;
+    .h1-token-conj {
+      padding-bottom: 4px;
+    }
+
+    .word-unit {
+      display: inline-flex;
       white-space: nowrap;
+      align-items: baseline;
+    }
+
+    .char-mask {
+      position: relative;
+      display: inline-block;
+      overflow: hidden;
+      line-height: 1.22;
+      padding-bottom: 0.06em;
+      margin-bottom: -0.06em;
+      vertical-align: bottom;
+    }
+
+    .char-top {
+      display: inline-block;
       will-change: transform;
     }
 
-    .hero-hud-layer {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    .hud-box {
+    .char-bottom {
       position: absolute;
       top: 0;
       left: 0;
-      width: 0;
-      height: 0;
-      opacity: 0;
-      will-change: transform, width, height, opacity;
+      width: 100%;
+      height: 100%;
+      display: inline-block;
+      will-change: transform;
     }
 
-    .hud-stroke {
+    .phrase-baseline {
       position: absolute;
-      inset: 0;
-      border: 1px solid var(--text);
-    }
-
-    .hud-tag {
-      position: absolute;
-      top: -18px;
-      right: -1px;
-      height: 15px;
-      padding: 0 5px;
-      background-color: var(--text);
-      color: var(--bg);
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 0.625rem;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      font-variant-numeric: tabular-nums;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-      line-height: 1;
-      border-radius: 2px 2px 0 0;
-    }
-
-    .hud-corner {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-    }
-
-    .hud-corner.c-tl { top: -3px; left: -3px; }
-    .hud-corner.c-tr { top: -3px; right: -3px; }
-    .hud-corner.c-bl { bottom: -3px; left: -3px; }
-    .hud-corner.c-br { bottom: -3px; right: -3px; }
-
-    .anchor-node {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      background-color: var(--bg);
-      border: 1.25px solid var(--text);
-    }
-
-    .c-tl .anchor-node { top: 0; left: 0; }
-    .c-tr .anchor-node { top: 0; right: 0; }
-    .c-bl .anchor-node { bottom: 0; left: 0; }
-    .c-br .anchor-node { bottom: 0; right: 0; }
-
-    .vf-arm-h,
-    .vf-arm-v {
-      position: absolute;
-      background-color: var(--text);
-      opacity: 0;
-    }
-
-    .vf-arm-h {
-      width: 9px;
+      left: 0;
+      right: 0;
+      bottom: 0;
       height: 1.5px;
-    }
-
-    .vf-arm-v {
-      width: 1.5px;
-      height: 9px;
-    }
-
-    .c-tl .vf-arm-h { top: 2px; left: 2px; transform-origin: left center; }
-    .c-tl .vf-arm-v { top: 2px; left: 2px; transform-origin: center top; }
-
-    .c-tr .vf-arm-h { top: 2px; right: 2px; transform-origin: right center; }
-    .c-tr .vf-arm-v { top: 2px; right: 2px; transform-origin: center top; }
-
-    .c-bl .vf-arm-h { bottom: 2px; left: 2px; transform-origin: left center; }
-    .c-bl .vf-arm-v { bottom: 2px; left: 2px; transform-origin: center bottom; }
-
-    .c-br .vf-arm-h { bottom: 2px; right: 2px; transform-origin: right center; }
-    .c-br .vf-arm-v { bottom: 2px; right: 2px; transform-origin: center bottom; }
-
-    .vf-reticle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 7px;
-      height: 7px;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-    }
-
-    .vf-reticle::before,
-    .vf-reticle::after {
-      content: '';
-      position: absolute;
       background-color: var(--text);
-    }
-
-    .vf-reticle::before {
-      top: 3px;
-      left: 0;
-      width: 7px;
-      height: 1px;
-    }
-
-    .vf-reticle::after {
-      top: 0;
-      left: 3px;
-      width: 1px;
-      height: 7px;
+      transform-origin: left center;
+      transform: scaleX(0);
+      pointer-events: none;
+      will-change: transform, opacity;
+      transition: background-color 0.25s ease;
     }
 
     .bio-copy {
@@ -362,6 +326,7 @@
       line-height: 1.7;
       color: var(--body);
       will-change: transform, opacity;
+      transition: color 0.25s ease;
     }
 
     .links-list {
@@ -382,7 +347,7 @@
       color: var(--text);
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 1rem;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.2s ease, color 0.25s ease;
     }
 
     @media (hover: hover) {
@@ -398,6 +363,7 @@
     .row-label {
       color: var(--text);
       font-weight: 400;
+      transition: color 0.25s ease;
     }
 
     .row-icon {
@@ -406,7 +372,7 @@
       justify-content: center;
       color: var(--muted);
       font-size: 1rem;
-      transition: transform 0.2s ease, color 0.2s ease;
+      transition: transform 0.2s ease, color 0.25s ease;
     }
 
     @media (hover: hover) {
@@ -442,6 +408,7 @@
 
     .copy-trigger:focus-visible,
     a.link-row:focus-visible,
+    .ig-card-link:focus-visible,
     .footer-logo-link:focus-visible {
       outline: 1.5px solid var(--text);
       outline-offset: 2px;
@@ -457,30 +424,73 @@
       width: 100%;
     }
 
-    .ig-crop-viewport {
+    .ig-card {
       width: 100%;
       border: 1px solid var(--border);
       border-radius: 10px;
-      background-color: #FFFFFF;
+      background-color: var(--surface);
       overflow: hidden;
-      position: relative;
       will-change: transform, opacity;
+      transition: border-color 0.25s ease, background-color 0.25s ease;
     }
 
-    .ig-crop-inner {
+    .ig-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 15px;
+      border-bottom: 1px solid var(--border);
+      background-color: var(--surface);
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 0.84375rem;
+      transition: border-color 0.25s ease, background-color 0.25s ease;
+    }
+
+    .ig-handle {
+      color: var(--text);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .ig-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .ig-card-link:hover,
+    .ig-handle:hover {
+      color: var(--text);
+    }
+
+    .ig-crop-viewport {
       width: 100%;
-      margin-top: -188px;
-      margin-bottom: -118px;
+      overflow: hidden;
+      background-color: #FFFFFF;
+      position: relative;
     }
 
-    .ig-crop-inner .instagram-media,
-    .ig-crop-inner iframe {
+    .ig-embed-shift {
+      margin-top: -100px;
+      margin-bottom: -52px;
+      width: 100%;
+    }
+
+    .ig-embed-shift .instagram-media,
+    .ig-embed-shift iframe {
       width: 100% !important;
       min-width: 100% !important;
       max-width: 100% !important;
       margin: 0 !important;
       border: 0 !important;
       box-shadow: none !important;
+      display: block !important;
     }
 
     footer {
@@ -494,6 +504,7 @@
       font-size: 0.875rem;
       font-variant-numeric: tabular-nums;
       color: var(--muted);
+      transition: color 0.25s ease;
     }
 
     .footer-brand {
@@ -568,8 +579,12 @@
         font-size: 1.0625rem;
       }
 
+      .header-meta {
+        gap: 10px;
+      }
+
       .header-clock {
-        font-size: 0.875rem;
+        font-size: 0.84375rem;
       }
 
       .left-column {
@@ -577,13 +592,12 @@
       }
 
       .hero-stage {
-        padding-top: 20px;
         margin-bottom: 18px;
       }
 
       .intro h1 {
-        font-size: clamp(1.85rem, 7.2vw, 2.25rem);
-        line-height: 1.24;
+        font-size: clamp(1.78rem, 7vw, 2.18rem);
+        line-height: 1.26;
       }
 
       .bio-copy {
@@ -611,9 +625,9 @@
         padding: 8px 14px;
       }
 
-      .ig-crop-inner {
-        margin-top: -176px;
-        margin-bottom: -112px;
+      .ig-embed-shift {
+        margin-top: -96px;
+        margin-bottom: -50px;
       }
 
       footer {
@@ -629,10 +643,17 @@
   </style>
 </head>
 <body>
+  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
   <div class="page-shell">
     <header>
       <span class="brand-name" id="header-brand">Ayaan Ahmed</span>
-      <span class="header-clock odometer" id="est-clock" aria-label="Current EST time"></span>
+      <div class="header-meta" id="header-meta">
+        <span class="header-clock odometer" id="est-clock" aria-label="Current EST time"></span>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch color theme">
+          <i class="ph ph-sun" id="theme-icon" aria-hidden="true"></i>
+        </button>
+      </div>
       <span class="hairline hairline-bottom" id="header-line"></span>
     </header>
 
@@ -640,43 +661,19 @@
       <div class="left-column">
         <section class="intro">
           <div class="hero-stage" id="hero-stage">
-            <div class="hero-backdrop-layer" aria-hidden="true">
-              <div class="hero-highlight" id="hero-highlight"></div>
-            </div>
-
-            <h1 id="hero-heading">
-              <span class="h1-clip"><span class="h1-phrase" id="phrase-gd">Graphic Designer</span></span>
-              <span class="h1-clip"><span class="h1-phrase" id="phrase-and">and</span></span>
-              <span class="h1-clip"><span class="h1-phrase" id="phrase-ph">Photographer.</span></span>
+            <h1 id="hero-heading" aria-label="Graphic Designer and Photographer.">
+              <span class="h1-token" id="phrase-gd" data-phrase="Graphic Designer">
+                <span class="phrase-text">Graphic Designer</span>
+                <span class="phrase-baseline" id="rule-gd" aria-hidden="true"></span>
+              </span>
+              <span class="h1-token h1-token-conj" id="phrase-and" data-phrase="and">
+                <span class="phrase-text">and</span>
+              </span>
+              <span class="h1-token" id="phrase-ph" data-phrase="Photographer.">
+                <span class="phrase-text">Photographer.</span>
+                <span class="phrase-baseline" id="rule-ph" aria-hidden="true"></span>
+              </span>
             </h1>
-
-            <div class="hero-hud-layer" aria-hidden="true">
-              <div class="hud-box" id="hud-box">
-                <div class="hud-stroke" id="hud-stroke"></div>
-                <div class="hud-tag" id="hud-tag">VEC · 01</div>
-                <div class="vf-reticle" id="vf-reticle"></div>
-                <div class="hud-corner c-tl">
-                  <span class="anchor-node"></span>
-                  <span class="vf-arm-h"></span>
-                  <span class="vf-arm-v"></span>
-                </div>
-                <div class="hud-corner c-tr">
-                  <span class="anchor-node"></span>
-                  <span class="vf-arm-h"></span>
-                  <span class="vf-arm-v"></span>
-                </div>
-                <div class="hud-corner c-bl">
-                  <span class="anchor-node"></span>
-                  <span class="vf-arm-h"></span>
-                  <span class="vf-arm-v"></span>
-                </div>
-                <div class="hud-corner c-br">
-                  <span class="anchor-node"></span>
-                  <span class="vf-arm-h"></span>
-                  <span class="vf-arm-v"></span>
-                </div>
-              </div>
-            </div>
           </div>
 
           <div class="bio-copy">
@@ -713,7 +710,7 @@
               <span class="hairline hairline-bottom link-line"></span>
             </a>
 
-            <a class="link-row" href="https://ayaanahmed.format.com" target="_blank" rel="noopener noreferrer">
+            <a class="link-row" href="https://ayaanahmed.format.com/graphic-design" target="_blank" rel="noopener noreferrer">
               <span class="row-label">Portfolio</span>
               <span class="row-icon" aria-hidden="true">
                 <i class="ph ph-arrow-up-right"></i>
@@ -731,14 +728,25 @@
       </div>
 
       <section class="right-column" aria-label="Instagram">
-        <div class="ig-crop-viewport" id="ig-viewport">
-          <div class="ig-crop-inner">
-            <blockquote
-              class="instagram-media"
-              data-instgrm-permalink="https://www.instagram.com/bluetigerincstudios/?utm_source=ig_embed&amp;utm_campaign=loading"
-              data-instgrm-version="14"
-              style="background:#FFF; border:0; border-radius:0; box-shadow:none; margin:0; max-width:100%; min-width:100%; padding:0; width:100%;">
-            </blockquote>
+        <div class="ig-card" id="ig-card">
+          <div class="ig-card-header">
+            <a class="ig-handle" href="https://instagram.com/bluetigerincstudios" target="_blank" rel="noopener noreferrer">
+              @bluetigerincstudios
+            </a>
+            <a class="ig-card-link" href="https://instagram.com/bluetigerincstudios" target="_blank" rel="noopener noreferrer">
+              <span>Instagram</span>
+              <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
+            </a>
+          </div>
+          <div class="ig-crop-viewport">
+            <div class="ig-embed-shift">
+              <blockquote
+                class="instagram-media"
+                data-instgrm-permalink="https://www.instagram.com/bluetigerincstudios/?utm_source=ig_embed&amp;utm_campaign=loading"
+                data-instgrm-version="14"
+                style="background:#FFF; border:0; border-radius:0; box-shadow:none; margin:0; max-width:100%; min-width:100%; padding:0; width:100%;">
+              </blockquote>
+            </div>
           </div>
         </div>
       </section>
@@ -766,6 +774,67 @@
       const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       document.getElementById('year').textContent = new Date().getFullYear();
 
+      const rootHtml = document.documentElement;
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      const themeIcon = document.getElementById('theme-icon');
+
+      function setTheme(themeName, animateIcon) {
+        rootHtml.setAttribute('data-theme', themeName);
+        const nextClass = themeName === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
+        if (animateIcon && window.gsap && !prefersReducedMotion) {
+          gsap.to(themeIcon, {
+            rotate: 90,
+            scale: 0.5,
+            opacity: 0,
+            duration: 0.16,
+            ease: 'power2.in',
+            onComplete: function () {
+              themeIcon.className = nextClass;
+              gsap.fromTo(
+                themeIcon,
+                { rotate: -90, scale: 0.5, opacity: 0 },
+                { rotate: 0, scale: 1, opacity: 1, duration: 0.28, ease: 'back.out(2)' }
+              );
+            }
+          });
+        } else {
+          themeIcon.className = nextClass;
+        }
+      }
+
+      setTheme('dark', false);
+
+      themeToggleBtn.addEventListener('click', function () {
+        const currentTheme = rootHtml.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+        setTheme(currentTheme === 'dark' ? 'light' : 'dark', true);
+      });
+
+      const scrollProgressEl = document.getElementById('scroll-progress');
+
+      function updateScrollProgress() {
+        const docEl = document.documentElement;
+        const maxScroll = docEl.scrollHeight - docEl.clientHeight;
+        if (maxScroll <= 4) {
+          scrollProgressEl.classList.remove('is-scrollable');
+          scrollProgressEl.style.transform = 'scaleX(0)';
+          return;
+        }
+        scrollProgressEl.classList.add('is-scrollable');
+        const ratio = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+        scrollProgressEl.style.transform = 'scaleX(' + ratio.toFixed(4) + ')';
+      }
+
+      window.addEventListener('scroll', updateScrollProgress, { passive: true });
+      window.addEventListener('resize', updateScrollProgress);
+      updateScrollProgress();
+
+      if (window.ResizeObserver) {
+        const ro = new ResizeObserver(function () {
+          updateScrollProgress();
+        });
+        ro.observe(document.body);
+      }
+
       const logoUrl = 'https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg';
       const faviconEl = document.getElementById('site-favicon');
 
@@ -779,6 +848,169 @@
           faviconEl.href = 'data:image/svg+xml;utf8,' + encodeURIComponent(styledFaviconSvg);
         })
         .catch(function () {});
+
+      function buildSplitPhrase(tokenEl) {
+        const textContainer = tokenEl.querySelector('.phrase-text');
+        const rawText = tokenEl.getAttribute('data-phrase') || textContainer.textContent;
+        textContainer.innerHTML = '';
+        textContainer.setAttribute('aria-hidden', 'true');
+
+        const words = rawText.split(' ');
+        const charMasks = [];
+        const charTops = [];
+        const charBottoms = [];
+
+        words.forEach(function (word, wIdx) {
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'word-unit';
+
+          for (let i = 0; i < word.length; i++) {
+            const ch = word[i];
+            const mask = document.createElement('span');
+            mask.className = 'char-mask';
+
+            const top = document.createElement('span');
+            top.className = 'char-top';
+            top.textContent = ch;
+
+            const bottom = document.createElement('span');
+            bottom.className = 'char-bottom';
+            bottom.textContent = ch;
+
+            mask.appendChild(top);
+            mask.appendChild(bottom);
+            wordSpan.appendChild(mask);
+
+            charMasks.push(mask);
+            charTops.push(top);
+            charBottoms.push(bottom);
+          }
+
+          textContainer.appendChild(wordSpan);
+
+          if (wIdx < words.length - 1) {
+            textContainer.appendChild(document.createTextNode(' '));
+          }
+        });
+
+        return {
+          token: tokenEl,
+          masks: charMasks,
+          tops: charTops,
+          bottoms: charBottoms
+        };
+      }
+
+      const phraseGdEl = document.getElementById('phrase-gd');
+      const phraseAndEl = document.getElementById('phrase-and');
+      const phrasePhEl = document.getElementById('phrase-ph');
+      const ruleGd = document.getElementById('rule-gd');
+      const rulePh = document.getElementById('rule-ph');
+
+      const splitGd = buildSplitPhrase(phraseGdEl);
+      const splitAnd = buildSplitPhrase(phraseAndEl);
+      const splitPh = buildSplitPhrase(phrasePhEl);
+
+      const allTops = splitGd.tops.concat(splitAnd.tops, splitPh.tops);
+      const allBottoms = splitGd.bottoms.concat(splitAnd.bottoms, splitPh.bottoms);
+
+      if (window.gsap) {
+        gsap.set(allTops, { yPercent: 0 });
+        gsap.set(allBottoms, { yPercent: 112 });
+        gsap.set([ruleGd, rulePh], { scaleX: 0, transformOrigin: 'left center' });
+      }
+
+      function createRollSubTimeline(splitObj, staggerVal, durationVal) {
+        const sub = gsap.timeline();
+        sub
+          .set(splitObj.tops, { yPercent: 0 })
+          .set(splitObj.bottoms, { yPercent: 112 })
+          .to(
+            splitObj.tops,
+            {
+              yPercent: -112,
+              duration: durationVal,
+              ease: 'expo.inOut',
+              stagger: staggerVal
+            },
+            0
+          )
+          .to(
+            splitObj.bottoms,
+            {
+              yPercent: 0,
+              duration: durationVal,
+              ease: 'expo.inOut',
+              stagger: staggerVal
+            },
+            0
+          )
+          .set(splitObj.tops, { yPercent: 0 })
+          .set(splitObj.bottoms, { yPercent: 112 });
+        return sub;
+      }
+
+      let masterHeadingTl = null;
+
+      function startHeadingLoop() {
+        if (!window.gsap || prefersReducedMotion) return;
+
+        masterHeadingTl = gsap.timeline({ repeat: -1 });
+
+        masterHeadingTl
+          .to(phraseGdEl, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 'gdFocus')
+          .to([phraseAndEl, phrasePhEl], { opacity: 0.36, duration: 0.45, ease: 'power2.out' }, 'gdFocus')
+          .set(ruleGd, { transformOrigin: 'left center', scaleX: 0 }, 'gdFocus')
+          .to(ruleGd, { scaleX: 1, duration: 0.72, ease: 'expo.inOut' }, 'gdFocus+=0.04')
+          .add(createRollSubTimeline(splitGd, 0.022, 0.72), 'gdFocus+=0.02')
+          .to({}, { duration: 1.15 })
+          .set(ruleGd, { transformOrigin: 'right center' })
+          .to(ruleGd, { scaleX: 0, duration: 0.52, ease: 'expo.inOut' })
+
+          .to(phraseGdEl, { opacity: 0.36, duration: 0.45, ease: 'power2.inOut' }, 'phFocus')
+          .to(phraseAndEl, { opacity: 0.36, duration: 0.45, ease: 'power2.inOut' }, 'phFocus')
+          .to(phrasePhEl, { opacity: 1, duration: 0.45, ease: 'power2.out' }, 'phFocus')
+          .set(rulePh, { transformOrigin: 'left center', scaleX: 0 }, 'phFocus')
+          .to(rulePh, { scaleX: 1, duration: 0.72, ease: 'expo.inOut' }, 'phFocus+=0.04')
+          .add(createRollSubTimeline(splitPh, 0.022, 0.72), 'phFocus+=0.02')
+          .to({}, { duration: 1.15 })
+          .set(rulePh, { transformOrigin: 'right center' })
+          .to(rulePh, { scaleX: 0, duration: 0.52, ease: 'expo.inOut' })
+
+          .to([phraseGdEl, phrasePhEl], { opacity: 1, duration: 0.5, ease: 'power2.out' }, 'unify')
+          .to(phraseAndEl, { opacity: 0.85, duration: 0.5, ease: 'power2.out' }, 'unify')
+          .add(
+            createRollSubTimeline(
+              { tops: allTops, bottoms: allBottoms },
+              0.014,
+              0.68
+            ),
+            'unify+=0.04'
+          )
+          .to({}, { duration: 2.2 });
+      }
+
+      function attachInteractiveRoll(splitObj, ruleEl) {
+        let isRolling = false;
+        splitObj.token.addEventListener('pointerenter', function () {
+          if (!window.gsap || prefersReducedMotion || isRolling) return;
+          isRolling = true;
+          gsap.killTweensOf([splitObj.tops, splitObj.bottoms, ruleEl]);
+          const tl = gsap.timeline({
+            onComplete: function () {
+              isRolling = false;
+            }
+          });
+          tl.set(ruleEl, { transformOrigin: 'left center', scaleX: 0 }, 0)
+            .to(ruleEl, { scaleX: 1, duration: 0.55, ease: 'expo.out' }, 0)
+            .add(createRollSubTimeline(splitObj, 0.018, 0.6), 0)
+            .set(ruleEl, { transformOrigin: 'right center' })
+            .to(ruleEl, { scaleX: 0, duration: 0.45, ease: 'expo.inOut' });
+        });
+      }
+
+      attachInteractiveRoll(splitGd, ruleGd);
+      attachInteractiveRoll(splitPh, rulePh);
 
       function updateOdometer(container, nextText, prevText) {
         if (!window.gsap || prefersReducedMotion) {
@@ -868,258 +1100,41 @@
       updateSessionTimer();
       setInterval(updateSessionTimer, 1000);
 
-      const heroStage = document.getElementById('hero-stage');
-      const phraseGd = document.getElementById('phrase-gd');
-      const phrasePh = document.getElementById('phrase-ph');
-      const heroHeading = document.getElementById('hero-heading');
-      const hudBox = document.getElementById('hud-box');
-      const hudStroke = document.getElementById('hud-stroke');
-      const hudTag = document.getElementById('hud-tag');
-      const heroHighlight = document.getElementById('hero-highlight');
-      const vfReticle = document.getElementById('vf-reticle');
-      const anchorNodes = hudBox.querySelectorAll('.anchor-node');
-      const vfArms = hudBox.querySelectorAll('.vf-arm-h, .vf-arm-v');
-
-      function measureSpanBox(targetEl, padX, padY) {
-        const stageRect = heroStage.getBoundingClientRect();
-        const rect = targetEl.getBoundingClientRect();
-        return {
-          x: Math.round(rect.left - stageRect.left - padX),
-          y: Math.round(rect.top - stageRect.top - padY),
-          width: Math.round(rect.width + padX * 2),
-          height: Math.round(rect.height + padY * 2)
-        };
-      }
-
-      function measureFullHeadingBox(padX, padY) {
-        const stageRect = heroStage.getBoundingClientRect();
-        const r1 = phraseGd.getBoundingClientRect();
-        const r2 = phrasePh.getBoundingClientRect();
-        const rAll = heroHeading.getBoundingClientRect();
-        const left = Math.min(r1.left, r2.left);
-        const top = Math.min(r1.top, r2.top);
-        const right = Math.max(r1.right, r2.right, rAll.left + Math.min(rAll.width, Math.max(r1.right - left, r2.right - left)));
-        const bottom = Math.max(r1.bottom, r2.bottom);
-        return {
-          x: Math.round(left - stageRect.left - padX),
-          y: Math.round(top - stageRect.top - padY),
-          width: Math.round((right - left) + padX * 2),
-          height: Math.round((bottom - top) + padY * 2)
-        };
-      }
-
-      let activeMode = 0;
-      let heroLoopTl = null;
-
-      function applyHudModeInstant(modeIndex) {
-        if (!window.gsap) return;
-        let box;
-        if (modeIndex === 0) {
-          box = measureSpanBox(phraseGd, 7, 3);
-          hudTag.textContent = 'VEC · ' + box.width + '×' + box.height;
-        } else if (modeIndex === 1) {
-          box = measureSpanBox(phrasePh, 8, 4);
-          hudTag.textContent = 'RAW · 35MM';
-        } else {
-          box = measureFullHeadingBox(8, 5);
-          hudTag.textContent = 'ART · ' + box.width + '×' + box.height;
-        }
-        gsap.set([hudBox, heroHighlight], {
-          x: box.x,
-          y: box.y,
-          width: box.width,
-          height: box.height
-        });
-      }
-
-      function buildHero2DLoop() {
-        if (!window.gsap || prefersReducedMotion) return;
-        if (heroLoopTl) heroLoopTl.kill();
-
-        const gdBoxInitial = measureSpanBox(phraseGd, 7, 3);
-        gsap.set([hudBox, heroHighlight], {
-          x: gdBoxInitial.x,
-          y: gdBoxInitial.y,
-          width: gdBoxInitial.width,
-          height: gdBoxInitial.height
-        });
-        hudTag.textContent = 'VEC · ' + gdBoxInitial.width + '×' + gdBoxInitial.height;
-
-        gsap.set(hudStroke, { borderColor: 'rgba(20, 20, 19, 0.85)' });
-        gsap.set(anchorNodes, { scale: 1, opacity: 1 });
-        gsap.set(vfArms, { scale: 0, opacity: 0 });
-        gsap.set(vfReticle, { scale: 0, opacity: 0 });
-        gsap.set([hudBox, heroHighlight], { opacity: 1 });
-
-        heroLoopTl = gsap.timeline({ repeat: -1 });
-
-        heroLoopTl
-          .call(function () { activeMode = 0; })
-          .to({}, { duration: 2.1 })
-          .call(function () {
-            activeMode = 1;
-            const phBox = measureSpanBox(phrasePh, 8, 4);
-            hudTag.textContent = 'RAW · 35MM';
-            gsap.to([hudBox, heroHighlight], {
-              x: phBox.x,
-              y: phBox.y,
-              width: phBox.width,
-              height: phBox.height,
-              duration: 0.9,
-              ease: 'expo.inOut',
-              overwrite: 'auto'
-            });
-            gsap.to(hudStroke, {
-              borderColor: 'rgba(20, 20, 19, 0.22)',
-              duration: 0.55,
-              ease: 'power2.inOut'
-            });
-            gsap.to(anchorNodes, {
-              scale: 0,
-              opacity: 0,
-              duration: 0.35,
-              ease: 'power2.in'
-            });
-            gsap.to(vfArms, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.5,
-              delay: 0.2,
-              ease: 'expo.out'
-            });
-            gsap.to(vfReticle, {
-              scale: 1,
-              opacity: 0.55,
-              duration: 0.45,
-              delay: 0.28,
-              ease: 'back.out(1.7)'
-            });
-          })
-          .to({}, { duration: 2.6 })
-          .call(function () {
-            activeMode = 2;
-            const fullBox = measureFullHeadingBox(8, 5);
-            hudTag.textContent = 'ART · ' + fullBox.width + '×' + fullBox.height;
-            gsap.to(hudBox, {
-              x: fullBox.x,
-              y: fullBox.y,
-              width: fullBox.width,
-              height: fullBox.height,
-              duration: 0.9,
-              ease: 'expo.inOut',
-              overwrite: 'auto'
-            });
-            gsap.to(heroHighlight, {
-              x: fullBox.x,
-              y: fullBox.y,
-              width: fullBox.width,
-              height: fullBox.height,
-              opacity: 0.5,
-              duration: 0.9,
-              ease: 'expo.inOut',
-              overwrite: 'auto'
-            });
-            gsap.to(hudStroke, {
-              borderColor: 'rgba(20, 20, 19, 0.5)',
-              duration: 0.55,
-              ease: 'power2.out'
-            });
-            gsap.to(anchorNodes, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.45,
-              delay: 0.15,
-              ease: 'expo.out'
-            });
-            gsap.to(vfReticle, {
-              scale: 0,
-              opacity: 0,
-              duration: 0.3,
-              ease: 'power2.in'
-            });
-          })
-          .to({}, { duration: 2.1 })
-          .call(function () {
-            activeMode = 0;
-            const gdBox = measureSpanBox(phraseGd, 7, 3);
-            hudTag.textContent = 'VEC · ' + gdBox.width + '×' + gdBox.height;
-            gsap.to(hudBox, {
-              x: gdBox.x,
-              y: gdBox.y,
-              width: gdBox.width,
-              height: gdBox.height,
-              duration: 0.9,
-              ease: 'expo.inOut',
-              overwrite: 'auto'
-            });
-            gsap.to(heroHighlight, {
-              x: gdBox.x,
-              y: gdBox.y,
-              width: gdBox.width,
-              height: gdBox.height,
-              opacity: 1,
-              duration: 0.9,
-              ease: 'expo.inOut',
-              overwrite: 'auto'
-            });
-            gsap.to(hudStroke, {
-              borderColor: 'rgba(20, 20, 19, 0.85)',
-              duration: 0.55,
-              ease: 'power2.out'
-            });
-            gsap.to(vfArms, {
-              scale: 0,
-              opacity: 0,
-              duration: 0.35,
-              ease: 'power2.in'
-            });
-            gsap.to(anchorNodes, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.45,
-              ease: 'expo.out'
-            });
-          })
-          .to({}, { duration: 0.9 });
-      }
-
       if (window.gsap && !prefersReducedMotion) {
         const introTl = gsap.timeline({
           defaults: { ease: 'power3.out' },
-          onComplete: function () {
-            buildHero2DLoop();
-          }
+          onComplete: startHeadingLoop
         });
 
         introTl
           .fromTo(
             '#header-line',
             { scaleX: 0 },
-            { scaleX: 1, duration: 0.9, ease: 'expo.out' },
+            { scaleX: 1, duration: 0.85, ease: 'expo.out' },
             0
           )
           .fromTo(
-            ['#header-brand', '#est-clock'],
-            { y: 12, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.7, stagger: 0.06 },
-            0.06
+            ['#header-brand', '#header-meta'],
+            { y: 10, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.65, stagger: 0.06 },
+            0.05
           )
           .fromTo(
-            '.h1-phrase',
-            { yPercent: 105 },
-            { yPercent: 0, duration: 0.78, stagger: 0.07 },
-            0.12
+            allTops,
+            { yPercent: 112 },
+            { yPercent: 0, duration: 0.78, stagger: 0.016, ease: 'expo.out' },
+            0.1
           )
           .fromTo(
             '.bio-paragraph',
-            { yPercent: 105, opacity: 0 },
-            { yPercent: 0, opacity: 1, duration: 0.75, stagger: 0.08 },
-            0.24
+            { yPercent: 100, opacity: 0 },
+            { yPercent: 0, opacity: 1, duration: 0.72, stagger: 0.08 },
+            0.26
           )
           .fromTo(
             '.link-line',
             { scaleX: 0 },
-            { scaleX: 1, duration: 0.8, stagger: 0.05, ease: 'expo.out' },
+            { scaleX: 1, duration: 0.75, stagger: 0.05, ease: 'expo.out' },
             0.3
           )
           .fromTo(
@@ -1128,41 +1143,31 @@
             {
               y: 0,
               opacity: 1,
-              duration: 0.6,
+              duration: 0.58,
               stagger: 0.05,
               clearProps: 'opacity,transform'
             },
             0.34
           )
           .fromTo(
-            '#ig-viewport',
+            '#ig-card',
             { y: 16, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.85 },
-            0.26
+            { y: 0, opacity: 1, duration: 0.8 },
+            0.28
           )
           .fromTo(
             '#footer-line',
             { scaleX: 0 },
-            { scaleX: 1, duration: 0.85, ease: 'expo.out' },
-            0.46
+            { scaleX: 1, duration: 0.8, ease: 'expo.out' },
+            0.44
           )
           .fromTo(
             ['.footer-brand', '.footer-logo-link', '#session-timer'],
             { y: 10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.65, stagger: 0.06 },
-            0.52
+            { y: 0, opacity: 1, duration: 0.6, stagger: 0.05 },
+            0.48
           );
       }
-
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(function () {
-          applyHudModeInstant(activeMode);
-        });
-      }
-
-      window.addEventListener('resize', function () {
-        applyHudModeInstant(activeMode);
-      });
 
       const copyBtn = document.getElementById('email-copy-btn');
       const cipherBytes = [40, 48, 40, 40, 39, 40, 33, 36, 44, 45, 58, 61, 60, 45, 32, 38, 58, 9, 46, 36, 40, 32, 37, 103, 42, 38, 36];
