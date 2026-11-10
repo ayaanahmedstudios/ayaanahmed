@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ayaan Ahmed</title>
   <meta name="description" content="Ayaan Ahmed — Graphic designer and photographer.">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/svg+xml" id="dynamic-favicon" href="https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg">
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,10 +13,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
   <style>
     :root,
     [data-theme="dark"] {
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
       --bg: #0D0D0C;
       --text: #F5F4F0;
       --body: #B5B4AE;
@@ -26,26 +26,18 @@
       --surface: #161614;
       --surface-hover: #20201D;
       --accent: #D6D3C9;
-      --pill-bg: #F5F4F0;
-      --pill-text: #0D0D0C;
-      --pill-bar: #0D0D0C;
-      --pill-shadow: 0 10px 30px -6px rgba(245, 244, 240, 0.22);
     }
 
     [data-theme="light"] {
-      --bg: #FAF9F5;
+      --bg: #F6F5F0;
       --text: #141413;
       --body: #42413D;
       --secondary: #575653;
       --muted: #86857F;
       --border: #E5E3DC;
-      --surface: #F0EFE9;
-      --surface-hover: #E6E3DA;
+      --surface: #ECEAE3;
+      --surface-hover: #E2DFD5;
       --accent: #5C5952;
-      --pill-bg: #141413;
-      --pill-text: #FAF9F5;
-      --pill-bar: #FAF9F5;
-      --pill-shadow: 0 10px 28px -6px rgba(20, 20, 19, 0.2);
     }
 
     * {
@@ -153,8 +145,8 @@
     }
 
     .header-clock {
-      font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 0.9375rem;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
       font-weight: 400;
       font-variant-numeric: tabular-nums;
       color: var(--muted);
@@ -162,13 +154,6 @@
       white-space: nowrap;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      transition: color 0.3s ease;
-    }
-
-    .clock-prefix {
-      color: var(--secondary);
-      font-weight: 500;
       transition: color 0.3s ease;
     }
 
@@ -217,7 +202,7 @@
       font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: clamp(1.95rem, 3.1vw, 2.55rem);
       font-weight: 500;
-      line-height: 1.24;
+      line-height: 1.32;
       letter-spacing: -0.03em;
       color: var(--text);
       margin-bottom: 22px;
@@ -226,42 +211,61 @@
       -webkit-user-select: none;
     }
 
-    .role-pill-wrap {
-      position: relative;
-      display: inline-block;
-      vertical-align: baseline;
-      font-weight: 500;
+    .hl-line-one {
+      display: block;
     }
 
-    .role-base {
+    .line-two {
+      display: block;
+      margin-top: 0.04em;
+    }
+
+    .hl-token {
+      display: inline-grid;
+      vertical-align: baseline;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    #token-gd {
+      margin-left: -0.18em;
+      margin-right: 0;
+    }
+
+    .word-and {
       display: inline-block;
+      padding: 0 0.14em 0 0;
       color: var(--text);
-      font-weight: 500;
+    }
+
+    #token-ph {
+      margin-left: 0.06em;
+    }
+
+    .hl-base,
+    .hl-fill {
+      grid-area: 1 / 1;
+      display: inline-block;
+      padding: 0.03em 0.18em;
+      margin: -0.03em 0;
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .hl-base {
+      color: var(--text);
       transition: color 0.3s ease;
     }
 
-    .role-invert {
-      position: absolute;
-      inset: 0;
-      display: inline-block;
+    .hl-fill {
       background-color: var(--text);
       color: var(--bg);
-      font-weight: 500;
-      padding: 0.04em 0.24em;
-      margin: -0.04em -0.24em;
-      border-radius: 6px;
       clip-path: inset(0% 100% 0% 0% round 6px);
-      pointer-events: none;
-      white-space: nowrap;
       will-change: clip-path;
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
       transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .role-conj {
-      display: inline-block;
-      color: var(--text);
-      font-weight: 500;
-      transition: color 0.3s ease;
     }
 
     .bio-copy {
@@ -495,7 +499,7 @@
       box-shadow: none !important;
     }
 
-    footer {
+    footer.site-footer {
       position: relative;
       margin-top: 32px;
       padding-top: 20px;
@@ -522,37 +526,123 @@
       transition: background-color 0.3s ease;
     }
 
-    .footer-copy {
+    .footer-left {
       justify-self: start;
+      display: inline-flex;
+      align-items: center;
     }
 
-    .footer-logo-wrap {
+    .footer-logo-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 4px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      opacity: 0.68;
+      transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1), transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .footer-logo-link:hover {
+      opacity: 1;
+      transform: translateY(-1px);
+    }
+
+    .footer-logo-link:focus-visible {
+      opacity: 1;
+      outline: 1.5px solid var(--text);
+      outline-offset: 4px;
+    }
+
+    .footer-brand-img {
+      height: 21px;
+      width: auto;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+
+    [data-theme="light"] .footer-brand-img {
+      filter: invert(1);
+    }
+
+    .footer-center {
       justify-self: center;
       display: inline-flex;
       align-items: center;
       justify-content: center;
     }
 
-    .footer-brand-logo {
-      display: inline-block;
-      width: 58px;
-      height: 22px;
-      background-color: var(--muted);
-      -webkit-mask-image: url('https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg');
-      mask-image: url('https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg');
-      -webkit-mask-size: contain;
-      mask-size: contain;
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      mask-position: center;
-      transition: background-color 0.3s ease;
+    .footer-rgd-link {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      padding: 4px 6px;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      transform: translateZ(0);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    .footer-timer {
+    .footer-rgd-link:hover {
+      transform: translateY(-1px);
+    }
+
+    .footer-rgd-link:focus-visible {
+      outline: 1.5px solid var(--text);
+      outline-offset: 4px;
+    }
+
+    .rgd-logo {
+      grid-area: 1 / 1;
+      height: 22px;
+      width: auto;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      will-change: opacity, filter;
+      transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), filter 0.35s ease;
+    }
+
+    .rgd-logo-base {
+      filter: invert(1);
+      opacity: 0.62;
+    }
+
+    [data-theme="light"] .rgd-logo-base {
+      filter: none;
+      opacity: 0.6;
+    }
+
+    .rgd-logo-red {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      opacity: 0;
+      filter: none;
+    }
+
+    .footer-rgd-link:hover .rgd-logo-base,
+    .footer-rgd-link:focus-visible .rgd-logo-base {
+      opacity: 0;
+    }
+
+    .footer-rgd-link:hover .rgd-logo-red,
+    .footer-rgd-link:focus-visible .rgd-logo-red {
+      opacity: 1;
+    }
+
+    .footer-right {
       justify-self: end;
       display: inline-flex;
       align-items: center;
+      font-family: var(--font-sans);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      color: var(--muted);
+      transition: color 0.3s ease;
     }
 
     @media (max-width: 920px) {
@@ -587,7 +677,7 @@
       }
 
       .header-clock {
-        font-size: 0.96875rem;
+        font-size: 0.875rem;
       }
 
       .theme-toggle {
@@ -606,7 +696,7 @@
 
       .hero-heading {
         font-size: clamp(2rem, 8.4vw, 2.45rem);
-        line-height: 1.22;
+        line-height: 1.28;
         margin-bottom: 20px;
       }
 
@@ -652,15 +742,19 @@
         top: -170px;
       }
 
-      footer {
+      footer.site-footer {
         margin-top: 24px;
         padding-top: 18px;
-        font-size: 0.9375rem;
+        font-size: 0.84375rem;
+        gap: 10px;
       }
 
-      .footer-brand-logo {
-        width: 52px;
-        height: 20px;
+      .footer-brand-img {
+        height: 18px;
+      }
+
+      .rgd-logo {
+        height: 19px;
       }
     }
   </style>
@@ -674,9 +768,8 @@
     <header>
       <span class="brand-name" id="header-brand">Ayaan Ahmed</span>
       <div class="header-right" id="header-right">
-        <span class="header-clock" id="est-clock" aria-label="Current EST time">
-          <span class="clock-prefix">EST</span>
-          <span id="est-time-val">--:--:-- --</span>
+        <span class="header-clock" id="live-clock" aria-label="Current EST time">
+          <span id="est-time-val">EST --:--:--</span>
         </span>
         <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle color theme">
           <i class="ph ph-sun" id="theme-icon" aria-hidden="true"></i>
@@ -689,14 +782,17 @@
       <div class="left-column">
         <section class="intro">
           <h1 class="hero-heading" id="hero-heading" aria-label="Graphic Designer and Photographer.">
-            <span class="role-pill-wrap" id="phrase-gd">
-              <span class="role-base">Graphic Designer</span>
-              <span class="role-invert" id="invert-gd" aria-hidden="true">Graphic Designer</span>
+            <span class="hl-line-one">
+              <span class="hl-token" id="token-gd">
+                <span class="hl-base">Graphic Designer</span>
+                <span class="hl-fill" id="fill-gd" aria-hidden="true">Graphic Designer</span>
+              </span>
             </span>
-            <span class="role-conj" id="phrase-and">and</span>
-            <span class="role-pill-wrap" id="phrase-ph">
-              <span class="role-base">Photographer.</span>
-              <span class="role-invert" id="invert-ph" aria-hidden="true">Photographer.</span>
+            <span class="line-two">
+              <span class="word-and">and</span><span class="hl-token" id="token-ph">
+                <span class="hl-base">Photographer.</span>
+                <span class="hl-fill" id="fill-ph" aria-hidden="true">Photographer.</span>
+              </span>
             </span>
           </h1>
 
@@ -714,7 +810,7 @@
           <div class="links-list">
             <div class="row-border-top"></div>
 
-            <a class="link-row" href="https://linkedin.com/in/ayaanahmedstudios" target="_blank" rel="noopener noreferrer">
+            <a class="link-row" href="https://www.linkedin.com/in/ayaan-ahmed-097978290/" target="_blank" rel="noopener noreferrer">
               <span class="row-label">LinkedIn</span>
               <span class="row-icon">
                 <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
@@ -722,7 +818,7 @@
               <div class="row-border-bottom"></div>
             </a>
 
-            <a class="link-row" href="https://instagram.com/bluetigerincstudios" target="_blank" rel="noopener noreferrer">
+            <a class="link-row" href="https://www.instagram.com/bluetigerincstudios/" target="_blank" rel="noopener noreferrer">
               <span class="row-label">Instagram</span>
               <span class="row-icon">
                 <i class="ph ph-arrow-up-right" aria-hidden="true"></i>
@@ -778,13 +874,47 @@
       </div>
     </main>
 
-    <footer>
+    <footer class="site-footer">
       <div class="footer-line"></div>
-      <span class="footer-copy" id="footer-copy">&copy; <span id="year"></span> Ayaan Ahmed</span>
-      <div class="footer-logo-wrap" id="footer-logo-wrap">
-        <span class="footer-brand-logo" role="img" aria-label="Ayaan Ahmed logo"></span>
+      <div class="footer-left" id="footer-logo-wrap">
+        <a class="footer-logo-link" href="https://www.instagram.com/bluetigerincstudios/" target="_blank" rel="noopener noreferrer" aria-label="Instagram (@bluetigerincstudios)">
+          <img
+            class="footer-brand-img"
+            src="https://res.cloudinary.com/df3r2ffqp/image/upload/v1774636264/white_logo_transparent_background_limz7z.png"
+            alt="Ayaan Ahmed logo"
+            onerror="this.onerror=null;this.src='https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg';"
+          >
+        </a>
       </div>
-      <span class="footer-timer" id="session-timer">0:00</span>
+      <div class="footer-center" id="footer-rgd-wrap">
+        <a
+          class="footer-rgd-link"
+          id="footer-rgd-link"
+          href="https://rgd.ca/members/profile/ayaanahmed"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Ayaan Ahmed — Student RGD Member Profile"
+        >
+          <img
+            class="rgd-logo rgd-logo-base"
+            id="rgd-logo-base"
+            src="assets/Student-RGD-Black.svg"
+            alt="Student RGD"
+            onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 132 28%22%3E%3Ctext x=%220%22 y=%2219%22 font-family=%22-apple-system,BlinkMacSystemFont,sans-serif%22 font-size=%2213.5%22 font-weight=%22600%22 letter-spacing=%220.04em%22 fill=%22%23000000%22%3ESTUDENT %7C RGD%3C/text%3E%3C/svg%3E';"
+          >
+          <img
+            class="rgd-logo rgd-logo-red"
+            id="rgd-logo-red"
+            src="assets/Student-RGD-Red.svg"
+            alt=""
+            aria-hidden="true"
+            onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 132 28%22%3E%3Ctext x=%220%22 y=%2219%22 font-family=%22-apple-system,BlinkMacSystemFont,sans-serif%22 font-size=%2213.5%22 font-weight=%22600%22 letter-spacing=%220.04em%22 fill=%22%23E31B23%22%3ESTUDENT %7C RGD%3C/text%3E%3C/svg%3E';"
+          >
+        </a>
+      </div>
+      <div class="footer-right" id="footer-copy">
+        <span>&copy; <span id="year"></span> Ayaan Ahmed</span>
+      </div>
     </footer>
   </div>
 
@@ -852,110 +982,125 @@
       setTimeout(updateScrollProgress, 300);
       setTimeout(updateScrollProgress, 1500);
 
-      const heroHeading = document.getElementById('hero-heading');
-      const invertGd = document.getElementById('invert-gd');
-      const invertPh = document.getElementById('invert-ph');
-
       const clockValEl = document.getElementById('est-time-val');
       const timeFormatter = new Intl.DateTimeFormat('en-US', {
         timeZone: 'America/Toronto',
-        hour: 'numeric',
+        hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: true
+        hour12: false
       });
 
       function updateClock() {
-        clockValEl.textContent = timeFormatter.format(new Date());
+        clockValEl.textContent = 'EST ' + timeFormatter.format(new Date());
       }
 
       updateClock();
       setInterval(updateClock, 1000);
 
-      const sessionEl = document.getElementById('session-timer');
-      const startTimestamp = Date.now();
-
-      function pad2(num) {
-        return String(num).padStart(2, '0');
-      }
-
-      function updateSessionTimer() {
-        const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startTimestamp) / 1000));
-        const hours = Math.floor(elapsedSeconds / 3600);
-        const minutes = Math.floor((elapsedSeconds % 3600) / 60);
-        const seconds = elapsedSeconds % 60;
-
-        if (hours > 0) {
-          sessionEl.textContent = hours + ':' + pad2(minutes) + ':' + pad2(seconds);
-        } else {
-          sessionEl.textContent = minutes + ':' + pad2(seconds);
-        }
-      }
-
-      updateSessionTimer();
-      setInterval(updateSessionTimer, 1000);
-
       if (window.gsap) {
+        gsap.config({ force3D: true });
+
+        const fillGd = document.getElementById('fill-gd');
+        const fillPh = document.getElementById('fill-ph');
+        const gdProxy = { l: 0, r: 100 };
+        const phProxy = { l: 0, r: 100 };
+
+        function renderGdClip() {
+          fillGd.style.clipPath = 'inset(0% ' + gdProxy.r.toFixed(2) + '% 0% ' + gdProxy.l.toFixed(2) + '% round 6px)';
+        }
+
+        function renderPhClip() {
+          fillPh.style.clipPath = 'inset(0% ' + phProxy.r.toFixed(2) + '% 0% ' + phProxy.l.toFixed(2) + '% round 6px)';
+        }
+
+        renderGdClip();
+        renderPhClip();
+
         const buildIn = gsap.timeline({
-          defaults: { ease: 'expo.out' },
+          defaults: { ease: 'expo.out', force3D: true },
           onComplete: function () {
-            gsap.set('.bio-para, .link-row, #header-brand, #header-right, #ig-card, #footer-copy, #footer-logo-wrap, #session-timer, #hero-heading', {
-              clearProps: 'transform,opacity,clipPath'
+            gsap.set('#hero-heading, .bio-para, .link-row, #header-brand, #header-right, #ig-card, #footer-logo-wrap, #footer-rgd-wrap, #footer-copy', {
+              clearProps: 'all'
             });
-            startHeroChoreography();
+            initHighlightSweepLoop();
           }
         });
 
         gsap.set(['.header-line', '.row-border-top', '.row-border-bottom', '.footer-line'], { scaleX: 0 });
         gsap.set(['#header-brand', '#header-right'], { opacity: 0, y: 10 });
-        gsap.set(heroHeading, { clipPath: 'inset(0% 100% 0% 0%)' });
-        gsap.set([invertGd, invertPh], { clipPath: 'inset(0% 100% 0% 0% round 6px)' });
+        gsap.set('#hero-heading', { opacity: 0, y: 10 });
         gsap.set('.bio-para', { opacity: 0, y: 14 });
         gsap.set('.link-row', { opacity: 0, y: 12 });
         gsap.set('#ig-card', { opacity: 0, y: 18 });
-        gsap.set(['#footer-copy', '#footer-logo-wrap', '#session-timer'], { opacity: 0, y: 8 });
+        gsap.set(['#footer-logo-wrap', '#footer-rgd-wrap', '#footer-copy'], { opacity: 0, y: 8 });
 
         buildIn
           .to('.header-line', { scaleX: 1, duration: 0.9 }, 0)
           .to(['#header-brand', '#header-right'], { opacity: 1, y: 0, duration: 0.7, stagger: 0.06 }, 0.08)
-          .to(heroHeading, {
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 0.95,
-            ease: 'expo.out'
+          .to('#hero-heading', {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out'
           }, 0.14)
-          .to('.bio-para', { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 }, 0.42)
-          .to(['.row-border-top', '.row-border-bottom'], { scaleX: 1, duration: 0.75, stagger: 0.05 }, 0.48)
-          .to('.link-row', { opacity: 1, y: 0, duration: 0.65, stagger: 0.055 }, 0.52)
-          .to('#ig-card', { opacity: 1, y: 0, duration: 0.85 }, 0.42)
-          .to('.footer-line', { scaleX: 1, duration: 0.85 }, 0.6)
-          .to(['#footer-copy', '#footer-logo-wrap', '#session-timer'], { opacity: 1, y: 0, duration: 0.65, stagger: 0.06 }, 0.68);
+          .to('.bio-para', { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 }, 0.36)
+          .to(['.row-border-top', '.row-border-bottom'], { scaleX: 1, duration: 0.75, stagger: 0.05 }, 0.44)
+          .to('.link-row', { opacity: 1, y: 0, duration: 0.65, stagger: 0.055 }, 0.48)
+          .to('#ig-card', { opacity: 1, y: 0, duration: 0.85 }, 0.38)
+          .to('.footer-line', { scaleX: 1, duration: 0.85 }, 0.56)
+          .to(['#footer-logo-wrap', '#footer-rgd-wrap', '#footer-copy'], { opacity: 1, y: 0, duration: 0.65, stagger: 0.06 }, 0.62);
 
-        function startHeroChoreography() {
-          const pillLoop = gsap.timeline({ repeat: -1, repeatDelay: 0.9 });
+        const rgdLink = document.getElementById('footer-rgd-link');
+        const rgdBase = document.getElementById('rgd-logo-base');
+        const rgdRed = document.getElementById('rgd-logo-red');
 
-          pillLoop
-            .set(invertGd, { clipPath: 'inset(0% 100% 0% 0% round 6px)' })
-            .set(invertPh, { clipPath: 'inset(0% 100% 0% 0% round 6px)' })
-            .to(invertGd, {
-              clipPath: 'inset(0% 0% 0% 0% round 6px)',
-              duration: 0.75,
-              ease: 'expo.inOut'
+        if (rgdLink && rgdBase && rgdRed) {
+          rgdLink.addEventListener('mouseenter', function () {
+            gsap.to(rgdBase, { opacity: 0, duration: 0.38, ease: 'power3.out', overwrite: 'auto' });
+            gsap.to(rgdRed, { opacity: 1, duration: 0.38, ease: 'power3.out', overwrite: 'auto' });
+          });
+
+          rgdLink.addEventListener('mouseleave', function () {
+            const restingOpacity = rootHtml.getAttribute('data-theme') === 'light' ? 0.6 : 0.62;
+            gsap.to(rgdBase, { opacity: restingOpacity, duration: 0.38, ease: 'power3.out', overwrite: 'auto' });
+            gsap.to(rgdRed, { opacity: 0, duration: 0.38, ease: 'power3.out', overwrite: 'auto' });
+          });
+        }
+
+        function initHighlightSweepLoop() {
+          const hlTl = gsap.timeline({ repeat: -1 });
+
+          hlTl
+            .set(gdProxy, { l: 0, r: 100, onUpdate: renderGdClip })
+            .set(phProxy, { l: 0, r: 100, onUpdate: renderPhClip })
+            .to(gdProxy, {
+              r: 0,
+              duration: 0.85,
+              ease: 'expo.inOut',
+              onUpdate: renderGdClip
             })
-            .to(invertGd, {
-              clipPath: 'inset(0% 0% 0% 100% round 6px)',
-              duration: 0.7,
-              ease: 'expo.inOut'
-            }, '+=0.85')
-            .to(invertPh, {
-              clipPath: 'inset(0% 0% 0% 0% round 6px)',
+            .to({}, { duration: 1.3 })
+            .to(gdProxy, {
+              l: 100,
               duration: 0.75,
-              ease: 'expo.inOut'
-            }, '-=0.45')
-            .to(invertPh, {
-              clipPath: 'inset(0% 0% 0% 100% round 6px)',
-              duration: 0.7,
-              ease: 'expo.inOut'
-            }, '+=0.85');
+              ease: 'expo.inOut',
+              onUpdate: renderGdClip
+            })
+            .to(phProxy, {
+              r: 0,
+              duration: 0.85,
+              ease: 'expo.inOut',
+              onUpdate: renderPhClip
+            }, '-=0.42')
+            .to({}, { duration: 1.3 })
+            .to(phProxy, {
+              l: 100,
+              duration: 0.75,
+              ease: 'expo.inOut',
+              onUpdate: renderPhClip
+            })
+            .to({}, { duration: 0.5 });
         }
       }
 
