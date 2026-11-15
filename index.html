@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ayaan Ahmed</title>
   <meta name="description" content="Ayaan Ahmed — Graphic designer and photographer.">
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.png">
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/df3r2ffqp/image/upload/v1774636264/white_logo_transparent_background_limz7z.png">
   <link rel="preconnect" href="https://api.fontshare.com">
   <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,27 +17,38 @@
     :root,
     [data-theme="dark"] {
       --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      --bg: #0D0D0C;
-      --text: #F5F4F0;
-      --body: #B5B4AE;
-      --secondary: #9E9D97;
-      --muted: #6E6D68;
-      --border: #222220;
-      --surface: #161614;
-      --surface-hover: #20201D;
-      --accent: #D6D3C9;
+      --bg: rgb(18, 36, 36);
+      --text: #F6F8F8;
+      --body: #DCE6E5;
+      --secondary: #B5C7C5;
+      --muted: #8AA3A1;
+      --border: rgb(36, 67, 67);
+      --surface: rgb(13, 27, 27);
+      --surface-hover: rgb(26, 50, 50);
+      --accent: #E2ECEB;
     }
 
     [data-theme="light"] {
-      --bg: #F6F5F0;
-      --text: #141413;
-      --body: #42413D;
-      --secondary: #575653;
-      --muted: #86857F;
-      --border: #E5E3DC;
-      --surface: #ECEAE3;
-      --surface-hover: #E2DFD5;
-      --accent: #5C5952;
+      --bg: #F3F6F5;
+      --text: rgb(36, 67, 67);
+      --body: rgb(48, 86, 86);
+      --secondary: rgb(72, 112, 112);
+      --muted: rgb(104, 142, 142);
+      --border: #CFDFDF;
+      --surface: #E6EFEF;
+      --surface-hover: #D8E6E6;
+      --accent: rgb(36, 67, 67);
+    }
+
+    /* Custom Text Highlight Matching Site Theme */
+    ::selection {
+      background-color: var(--text);
+      color: var(--bg);
+    }
+
+    ::-moz-selection {
+      background-color: var(--text);
+      color: var(--bg);
     }
 
     * {
@@ -127,21 +138,39 @@
       transition: background-color 0.3s ease;
     }
 
-    .brand-name {
-      font-family: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 1.0625rem;
-      font-weight: 500;
-      letter-spacing: -0.018em;
-      color: var(--text);
-      text-decoration: none;
-      display: inline-block;
-      transition: color 0.3s ease;
+    .brand-logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      user-select: none;
+      -webkit-user-select: none;
+      will-change: transform, opacity;
+    }
+
+    .header-brand-img {
+      height: 25px;
+      width: auto;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+
+    .footer-brand-img {
+      height: 21px;
+      width: auto;
+      display: block;
+      transition: filter 0.3s ease;
+    }
+
+    /* Recolors the white PNG logo to exact teal rgb(36, 67, 67) in light mode */
+    [data-theme="light"] .header-brand-img,
+    [data-theme="light"] .footer-brand-img {
+      filter: url(#teal-logo-filter);
     }
 
     .header-right {
       display: flex;
       align-items: center;
       gap: 14px;
+      will-change: transform, opacity;
     }
 
     .header-clock {
@@ -182,12 +211,17 @@
       border-radius: 4px;
     }
 
+    /*
+     * Balanced desktop proportions:
+     * Slightly wider right column (580px) so the 3x2 Instagram card's natural height
+     * matches the left column height, eliminating any empty space underneath.
+     */
     main {
       display: grid;
-      grid-template-columns: minmax(320px, 470px) minmax(340px, 540px);
+      grid-template-columns: minmax(320px, 460px) minmax(360px, 580px);
       justify-content: space-between;
-      align-items: start;
-      gap: 64px;
+      align-items: center;
+      gap: 56px;
       margin: auto 0;
       padding: 8px 0 28px;
     }
@@ -195,7 +229,8 @@
     .left-column {
       display: flex;
       flex-direction: column;
-      gap: 38px;
+      justify-content: space-between;
+      gap: 26px;
     }
 
     .hero-heading {
@@ -205,10 +240,9 @@
       line-height: 1.32;
       letter-spacing: -0.03em;
       color: var(--text);
-      margin-bottom: 22px;
+      margin-bottom: 18px;
       cursor: default;
-      user-select: none;
-      -webkit-user-select: none;
+      will-change: transform, opacity;
     }
 
     .hl-line-one {
@@ -236,6 +270,7 @@
       display: inline-block;
       padding: 0 0.14em 0 0;
       color: var(--text);
+      transition: color 0.3s ease;
     }
 
     #token-ph {
@@ -271,16 +306,23 @@
     .bio-copy {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       background: transparent;
     }
 
     .bio-copy p {
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 1.03125rem;
-      line-height: 1.72;
+      font-size: 1.015rem;
+      line-height: 1.68;
       color: var(--body);
       background: transparent;
+      will-change: transform, opacity;
+      transition: color 0.3s ease;
+    }
+
+    .bio-name {
+      color: var(--text);
+      font-weight: 500;
       transition: color 0.3s ease;
     }
 
@@ -312,16 +354,17 @@
 
     .link-row {
       position: relative;
-      min-height: 54px;
+      min-height: 52px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 13px 4px;
+      padding: 12px 4px;
       text-decoration: none;
       color: var(--text);
       font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 1rem;
+      will-change: transform, opacity;
       transition: opacity 0.22s ease, color 0.3s ease;
     }
 
@@ -403,6 +446,7 @@
       border-radius: 12px;
       background-color: var(--surface);
       overflow: hidden;
+      will-change: transform, opacity;
       transition: border-color 0.3s ease, background-color 0.3s ease;
     }
 
@@ -412,14 +456,14 @@
       justify-content: space-between;
       padding: 13px 16px;
       border-bottom: 1px solid var(--border);
-      background-color: var(--bg);
+      background-color: var(--surface);
       text-decoration: none;
       color: var(--text);
       transition: background-color 0.2s ease, border-color 0.3s ease, color 0.3s ease;
     }
 
     .ig-card-header:hover {
-      background-color: var(--surface);
+      background-color: var(--surface-hover);
     }
 
     .ig-handle-wrap {
@@ -450,17 +494,22 @@
       color: var(--text);
     }
 
+    /*
+     * Stable 3x2 Instagram Grid Viewport:
+     * Overrides Instagram's hardcoded 326px min-width on mobile so it never glitches or overflows.
+     */
     .ig-crop-viewport {
       width: 100%;
-      aspect-ratio: 3 / 1.88;
+      aspect-ratio: 3 / 1.97;
       overflow: hidden;
       position: relative;
       background-color: var(--surface);
+      transform: translateZ(0);
     }
 
     .ig-embed-shift {
       position: absolute;
-      top: -168px;
+      top: -158px;
       left: -2px;
       right: -2px;
     }
@@ -470,7 +519,7 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 3px;
+      height: 6px;
       background-color: var(--surface);
       z-index: 5;
       pointer-events: none;
@@ -482,7 +531,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      height: 4px;
+      height: 6px;
       background-color: var(--surface);
       z-index: 5;
       pointer-events: none;
@@ -492,7 +541,7 @@
     .ig-crop-viewport .instagram-media,
     .ig-crop-viewport iframe {
       width: 100% !important;
-      min-width: 100% !important;
+      min-width: 0 !important;
       max-width: 100% !important;
       margin: 0 !important;
       border: 0 !important;
@@ -550,7 +599,7 @@
       border-radius: 6px;
       cursor: pointer;
       text-decoration: none;
-      opacity: 0.75;
+      opacity: 0.82;
       transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1), transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
@@ -565,17 +614,6 @@
       outline-offset: 4px;
     }
 
-    .footer-brand-img {
-      height: 21px;
-      width: auto;
-      display: block;
-      transition: filter 0.3s ease;
-    }
-
-    [data-theme="light"] .footer-brand-img {
-      filter: invert(1);
-    }
-
     @media (max-width: 920px) {
       .page-shell {
         max-width: 600px;
@@ -584,8 +622,13 @@
 
       main {
         grid-template-columns: 1fr;
+        align-items: start;
         gap: 42px;
         margin: 0;
+      }
+
+      .left-column {
+        gap: 36px;
       }
     }
 
@@ -599,8 +642,8 @@
         padding-bottom: 16px;
       }
 
-      .brand-name {
-        font-size: 1.15rem;
+      .header-brand-img {
+        height: 21px;
       }
 
       .header-right {
@@ -669,10 +712,6 @@
         font-size: 0.875rem;
       }
 
-      .ig-embed-shift {
-        top: -170px;
-      }
-
       footer.site-footer {
         margin-top: 24px;
         padding-top: 18px;
@@ -687,13 +726,33 @@
   </style>
 </head>
 <body>
+  <!-- Hidden SVG Filter to tint white PNG logo to exact rgb(36, 67, 67) in Light Mode -->
+  <svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+    <defs>
+      <filter id="teal-logo-filter" color-interpolation-filters="sRGB">
+        <feColorMatrix type="matrix" values="
+          0 0 0 0 0.141
+          0 0 0 0 0.263
+          0 0 0 0 0.263
+          0 0 0 1 0" />
+      </filter>
+    </defs>
+  </svg>
+
   <div class="scroll-progress-track" id="scroll-progress-track" aria-hidden="true">
     <div class="scroll-progress-bar" id="scroll-progress-bar"></div>
   </div>
 
   <div class="page-shell">
     <header>
-      <span class="brand-name" id="header-brand">Ayaan Ahmed</span>
+      <div class="brand-logo-wrap" id="header-brand">
+        <img
+          class="header-brand-img"
+          src="https://res.cloudinary.com/df3r2ffqp/image/upload/v1774636264/white_logo_transparent_background_limz7z.png"
+          alt="Ayaan Ahmed logo"
+          onerror="this.onerror=null;this.src='https://res.cloudinary.com/ayaanahmed/image/upload/v1769144180/ayaan-ahmed-logo_pqauyp.svg';"
+        >
+      </div>
       <div class="header-right" id="header-right">
         <span class="header-clock" id="live-clock" aria-label="Current EST time">
           <span id="est-time-val">EST --:--:--</span>
@@ -725,7 +784,7 @@
 
           <div class="bio-copy">
             <p class="bio-para">
-              Hi, my name is Ayaan, I'm a graphic designer and photographer, and I'm currently in my final-year studying graphic design at OCAD University.
+              Hi, my name is <span class="bio-name">Ayaan Ahmed</span>, I'm a graphic designer and photographer, and I'm currently in my final-year studying graphic design at OCAD University.
             </p>
             <p class="bio-para">
               My design spans across many realms, including branding, print-based, editorial, narrative, and even a bit of web design. I enjoy photographing landscapes, cities, and animals. I also enjoy creating videos, most recently a series of travel documentaries, and numerous reels.
@@ -784,14 +843,14 @@
               </span>
             </a>
 
-            <div class="ig-crop-viewport">
+            <div class="ig-crop-viewport" id="ig-crop-viewport">
               <div class="ig-top-mask" aria-hidden="true"></div>
-              <div class="ig-embed-shift">
+              <div class="ig-embed-shift" id="ig-embed-shift">
                 <blockquote
                   class="instagram-media"
                   data-instgrm-permalink="https://www.instagram.com/bluetigerincstudios/?utm_source=ig_embed&amp;utm_campaign=loading"
                   data-instgrm-version="14"
-                  style="background:#FFF; border:0; border-radius:0; box-shadow:none; margin:0; max-width:100%; min-width:100%; padding:0; width:100%;">
+                  style="background:#FFF; border:0; border-radius:0; box-shadow:none; margin:0; max-width:100%; min-width:0; padding:0; width:100%;">
                 </blockquote>
               </div>
               <div class="ig-bottom-mask" aria-hidden="true"></div>
@@ -868,13 +927,37 @@
       setTimeout(updateScrollProgress, 300);
       setTimeout(updateScrollProgress, 1500);
 
+      // Calibrates the Instagram embed crop across desktop and mobile widths so it never glitches
+      const igViewport = document.getElementById('ig-crop-viewport');
+      const igShift = document.getElementById('ig-embed-shift');
+
+      function calibrateInstagramCrop() {
+        if (!igViewport || !igShift) return;
+        const w = igViewport.clientWidth;
+        if (w <= 360) {
+          // On narrow phones Instagram wraps the profile header taller
+          igShift.style.top = '-174px';
+        } else if (w <= 440) {
+          igShift.style.top = '-162px';
+        } else {
+          igShift.style.top = '-158px';
+        }
+      }
+
+      calibrateInstagramCrop();
+      window.addEventListener('resize', calibrateInstagramCrop);
+      if (window.ResizeObserver && igViewport) {
+        new ResizeObserver(calibrateInstagramCrop).observe(igViewport);
+      }
+
+      // 12-hour clock with single-digit hour (no leading 0)
       const clockValEl = document.getElementById('est-time-val');
       const timeFormatter = new Intl.DateTimeFormat('en-US', {
         timeZone: 'America/Toronto',
-        hour: '2-digit',
+        hour: 'numeric',
         minute: '2-digit',
         second: '2-digit',
-        hour12: false
+        hour12: true
       });
 
       function updateClock() {
@@ -904,7 +987,7 @@
         renderPhClip();
 
         const buildIn = gsap.timeline({
-          defaults: { ease: 'expo.out', force3D: true },
+          defaults: { ease: 'power3.out', force3D: true },
           onComplete: function () {
             gsap.set('#hero-heading, .bio-para, .link-row, #header-brand, #header-right, #ig-card, #footer-logo-wrap, #footer-copy', {
               clearProps: 'all'
@@ -914,28 +997,57 @@
         });
 
         gsap.set(['.header-line', '.row-border-top', '.row-border-bottom', '.footer-line'], { scaleX: 0 });
-        gsap.set(['#header-brand', '#header-right'], { opacity: 0, y: 10 });
-        gsap.set('#hero-heading', { opacity: 0, y: 10 });
+        gsap.set(['#header-brand', '#header-right'], { opacity: 0, y: 8 });
+        gsap.set('#hero-heading', { opacity: 0, y: 12 });
         gsap.set('.bio-para', { opacity: 0, y: 14 });
         gsap.set('.link-row', { opacity: 0, y: 12 });
-        gsap.set('#ig-card', { opacity: 0, y: 18 });
+        gsap.set('#ig-card', { opacity: 0, y: 16 });
         gsap.set(['#footer-copy', '#footer-logo-wrap'], { opacity: 0, y: 8 });
 
         buildIn
-          .to('.header-line', { scaleX: 1, duration: 0.9 }, 0)
-          .to(['#header-brand', '#header-right'], { opacity: 1, y: 0, duration: 0.7, stagger: 0.06 }, 0.08)
-          .to('#hero-heading', {
+          .to('.header-line', { scaleX: 1, duration: 0.9, ease: 'expo.out' }, 0)
+          .to(['#header-brand', '#header-right'], {
             opacity: 1,
             y: 0,
             duration: 0.7,
-            ease: 'power3.out'
-          }, 0.14)
-          .to('.bio-para', { opacity: 1, y: 0, duration: 0.75, stagger: 0.1 }, 0.36)
-          .to(['.row-border-top', '.row-border-bottom'], { scaleX: 1, duration: 0.75, stagger: 0.05 }, 0.44)
-          .to('.link-row', { opacity: 1, y: 0, duration: 0.65, stagger: 0.055 }, 0.48)
-          .to('#ig-card', { opacity: 1, y: 0, duration: 0.85 }, 0.38)
-          .to('.footer-line', { scaleX: 1, duration: 0.85 }, 0.56)
-          .to(['#footer-copy', '#footer-logo-wrap'], { opacity: 1, y: 0, duration: 0.65, stagger: 0.06 }, 0.62);
+            stagger: 0.06
+          }, 0.08)
+          .to('#hero-heading', {
+            opacity: 1,
+            y: 0,
+            duration: 0.75
+          }, 0.16)
+          .to('.bio-para', {
+            opacity: 1,
+            y: 0,
+            duration: 0.75,
+            stagger: 0.1
+          }, 0.28)
+          .to('#ig-card', {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: 'expo.out'
+          }, 0.34)
+          .to(['.row-border-top', '.row-border-bottom'], {
+            scaleX: 1,
+            duration: 0.75,
+            stagger: 0.05,
+            ease: 'expo.out'
+          }, 0.42)
+          .to('.link-row', {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+            stagger: 0.055
+          }, 0.46)
+          .to('.footer-line', { scaleX: 1, duration: 0.85, ease: 'expo.out' }, 0.56)
+          .to(['#footer-copy', '#footer-logo-wrap'], {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+            stagger: 0.06
+          }, 0.62);
 
         function initHighlightSweepLoop() {
           const hlTl = gsap.timeline({ repeat: -1 });
