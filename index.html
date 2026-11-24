@@ -326,6 +326,25 @@
       transition: color 0.3s ease;
     }
 
+    .inline-link {
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: var(--muted);
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      transition: text-decoration-color 0.2s ease, color 0.2s ease;
+    }
+
+    .inline-link:hover {
+      text-decoration-color: var(--text);
+    }
+
+    .inline-link:focus-visible {
+      outline: 1.5px solid var(--text);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+
     .links-list {
       position: relative;
       display: flex;
@@ -712,6 +731,15 @@
         font-size: 0.875rem;
       }
 
+      /* Mobile-only Instagram grid crop adjustment so top posts aren't clipped and bottom white space is eliminated */
+      .ig-crop-viewport {
+        aspect-ratio: 3 / 2.04;
+      }
+
+      .ig-embed-shift {
+        top: -116px;
+      }
+
       footer.site-footer {
         margin-top: 24px;
         padding-top: 18px;
@@ -787,7 +815,7 @@
               Hi, my name is <span class="bio-name">Ayaan Ahmed</span>, I'm a graphic designer and photographer, and I'm currently in my final-year studying graphic design at OCAD University.
             </p>
             <p class="bio-para">
-              My design spans across many realms, including branding, print-based, editorial, narrative, and even a bit of web design. I enjoy photographing landscapes, cities, and animals. I also enjoy creating videos, most recently a series of travel documentaries, and numerous reels.
+              My <a class="inline-link" href="https://ayaanahmed.format.com/graphic-design" target="_blank" rel="noopener noreferrer">design</a> spans across many realms, including branding, print-based, editorial, narrative, and even a bit of web design. I enjoy <a class="inline-link" href="https://www.instagram.com/bluetigerincstudios/" target="_blank" rel="noopener noreferrer">photographing</a> landscapes, cities, and animals. I also enjoy creating <a class="inline-link" href="https://www.youtube.com/@BlueTigerIncStudios" target="_blank" rel="noopener noreferrer">videos</a>, most recently a series of travel documentaries, and numerous reels.
             </p>
           </div>
         </section>
@@ -934,11 +962,8 @@
       function calibrateInstagramCrop() {
         if (!igViewport || !igShift) return;
         const w = igViewport.clientWidth;
-        if (w <= 360) {
-          // On narrow phones Instagram wraps the profile header taller
-          igShift.style.top = '-174px';
-        } else if (w <= 440) {
-          igShift.style.top = '-162px';
+        if (w <= 520) {
+          igShift.style.top = '-116px';
         } else {
           igShift.style.top = '-158px';
         }
