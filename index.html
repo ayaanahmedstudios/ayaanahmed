@@ -328,15 +328,17 @@
 
     .inline-link {
       color: var(--text);
+      font-weight: 500;
       text-decoration: underline;
-      text-decoration-color: var(--muted);
-      text-underline-offset: 3px;
-      text-decoration-thickness: 1px;
-      transition: text-decoration-color 0.2s ease, color 0.2s ease;
+      text-decoration-color: var(--secondary);
+      text-underline-offset: 3.5px;
+      text-decoration-thickness: 1.25px;
+      transition: text-decoration-color 0.2s ease, opacity 0.2s ease, color 0.2s ease;
     }
 
     .inline-link:hover {
       text-decoration-color: var(--text);
+      opacity: 0.85;
     }
 
     .inline-link:focus-visible {
@@ -731,13 +733,12 @@
         font-size: 0.875rem;
       }
 
-      /* Mobile-only Instagram grid crop adjustment so top posts aren't clipped and bottom white space is eliminated */
       .ig-crop-viewport {
-        aspect-ratio: 3 / 2.04;
+        aspect-ratio: 3 / 1.98;
       }
 
       .ig-embed-shift {
-        top: -116px;
+        top: -152px;
       }
 
       footer.site-footer {
@@ -961,9 +962,8 @@
 
       function calibrateInstagramCrop() {
         if (!igViewport || !igShift) return;
-        const w = igViewport.clientWidth;
-        if (w <= 520) {
-          igShift.style.top = '-116px';
+        if (window.innerWidth <= 520) {
+          igShift.style.top = '-152px';
         } else {
           igShift.style.top = '-158px';
         }
